@@ -1,0 +1,19 @@
+{
+  "name": "mcms_api",
+  "version": "1.0.0",
+  "description": "API for the medical center management system",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JosephLahiru/mcms_api.git"
+  },
+  "author": "Joseph Rasanjana",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/JosephLahiru/mcms_api/issues"
+  },
+  "homepage": "https://github.com/JosephLahiru/mcms_api#readme"
+}
