@@ -3,6 +3,10 @@ const db = require('./db');
 
 const app = express();
 
+app.get('/', (req, res) => {
+    res.send('Hello, world!');
+});
+
 app.get('/doctors', (req, res) => {
     const sql = 'SELECT * FROM doctor';
     db.query(sql, (err, result) => {

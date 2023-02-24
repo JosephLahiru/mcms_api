@@ -1,4 +1,4 @@
-const mysql = require('mysql');
+const mysql = require('mysql2');
 const dotenv = require('dotenv');
 
 dotenv.config();
@@ -11,11 +11,17 @@ const connection = mysql.createConnection({
 });
 
 connection.connect((err) => {
-    if (err) {
-        console.error('Error connecting to database: ', err);
-        return;
-    }
-    console.log('Connected to database.');
+  if (err) {
+    console.error('Error connecting to the database: ' + err.stack);
+    return;
+  }
+  console.log('Connected to the database as id ' + connection.threadId);
 });
 
 module.exports = connection;
+
+// connection.query('SELECT * FROM doctor', (err, rows) => {
+//   if (err) throw err;
+//   console.log('Data received from Db:');
+//   console.log(rows);
+// });
