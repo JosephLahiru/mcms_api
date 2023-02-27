@@ -29,7 +29,7 @@ app.post('/set_doctors', (req, res) => {
     db.query(sql, [d_id, first_name, last_name, nic, email, address, contact_no], (err, result) => {
         if (err) {
             console.error('Error executing query: ', err);
-            res.status(500).json({ error: 'Internal server error.' });
+            res.status(500).json({ error: 'Internal server error.' + err });
             return;
         }
         res.json({ message: 'Doctor added successfully.' });
