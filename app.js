@@ -61,6 +61,25 @@ app.post('/set_earnings', (req, res) => {
     });
 });
 
+app.get('/get_earnings/:date', (req, res) => {
+    const date = req.params.date;
+    const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
+    if (!dateRegex.test(date)) {
+        res.status(400).json({ error: 'Invalid date format.' });
+        return;
+    }
+    const sql = 'SELECT * FROM earnings WHERE date = ?';
+    db.query(sql, [date], (err, result) => {
+        if (err) {
+            console.error('Error executing query: ', err);
+            res.status(500).json({ error: 'Internal server error.' });
+            return;
+        }
+        res.json(result);
+    });
+});
+
+
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
     console.log(`Server listening on port ${port}.`);
