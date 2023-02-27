@@ -49,12 +49,12 @@ app.get('/get_earnings', (req, res) => {
 });
 
 app.post('/set_earnings', (req, res) => {
-    const { date, free_amt, ac_cost_free, paid_amt, ac_cost_paid, profit, ern_cost} = req.body;
-    const sql = 'INSERT INTO earnings (date, free_amt, ac_cost_free, paid_amt, ac_cost_paid, profit) VALUES (?, ?, ?, ?, ?, ?, ?)';
-    db.query(sql, [date, free_amt, ac_cost_free, paid_amt, ac_cost_paid, profit, ern_cost], (err, result) => {
+    const { date, free_amt, ac_cost_free, paid_amt, ac_cost_paid, profit} = req.body;
+    const sql = 'INSERT INTO earnings (date, free_amt, ac_cost_free, paid_amt, ac_cost_paid, profit) VALUES (?, ?, ?, ?, ?, ?)';
+    db.query(sql, [date, free_amt, ac_cost_free, paid_amt, ac_cost_paid, profit], (err, result) => {
         if (err) {
             console.error('Error executing query: ', err);
-            res.status(500).json({ error: 'Internal server error.' });
+            res.status(500).json({ error: 'Internal server error.' + err});
             return;
         }
         res.json({ message: 'Earning added successfully.' });
