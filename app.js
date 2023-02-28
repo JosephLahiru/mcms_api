@@ -23,6 +23,24 @@ app.get('/get_doctors', (req, res) => {
     });
 });
 
+app.get('/get_doctors/:d_id', (req, res) => {
+    const d_id = req.params.d_id;
+    const d_idRegex = /^D\d{3}$/;
+    if (!d_idRegex.test(d_id)) {
+        res.status(400).json({ error: 'Invalid doctor ID format.' });
+        return;
+    }
+    const sql = 'SELECT * FROM doctor WHERE d_id = ?';
+    db.query(sql, [d_id], (err, result) => {
+        if (err) {
+            console.error('Error executing query: ', err);
+            res.status(500).json({ error: 'Internal server error.' + err });
+            return;
+        }
+        res.json(result);
+    });
+});
+
 app.post('/set_doctors', (req, res) => {
     const { d_id, first_name, last_name, nic, email, address, contact_no } = req.body;
     const sql = 'INSERT INTO doctor (d_id, first_name, last_name, nic, email, address, contact_no) VALUES (?, ?, ?, ?, ?, ?, ?)';
