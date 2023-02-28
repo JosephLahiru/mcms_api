@@ -16,7 +16,7 @@ app.get('/get_doctors', (req, res) => {
     db.query(sql, (err, result) => {
         if (err) {
             console.error('Error executing query: ', err);
-            res.status(500).json({ error: 'Internal server error.' });
+            res.status(500).json({ error: 'Internal server error.' + err   });
             return;
         }
         res.json(result);
@@ -41,7 +41,7 @@ app.get('/get_earnings', (req, res) => {
     db.query(sql, (err, result) => {
         if (err) {
             console.error('Error executing query: ', err);
-            res.status(500).json({ error: 'Internal server error.' });
+            res.status(500).json({ error: 'Internal server error.' + err  });
             return;
         }
         res.json(result);
@@ -72,7 +72,7 @@ app.get('/get_earnings/:date', (req, res) => {
     db.query(sql, [date], (err, result) => {
         if (err) {
             console.error('Error executing query: ', err);
-            res.status(500).json({ error: 'Internal server error.' });
+            res.status(500).json({ error: 'Internal server error.' + err });
             return;
         }
         res.json(result);
