@@ -23,6 +23,18 @@ app.get('/get_doctors', (req, res) => {
     });
 });
 
+app.get('/get_patients', (req, res) => {
+    const sql = 'SELECT * FROM patient';
+    db.query(sql, (err, result) => {
+        if (err) {
+            console.error('Error executing query: ', err);
+            res.status(500).json({ error: 'Internal server error.' + err   });
+            return;
+        }
+        res.json(result);
+    });
+});
+
 app.get('/get_doctors/:d_id', (req, res) => {
     const d_id = req.params.d_id;
     const d_idRegex = /^D\d{3}$/;
@@ -102,3 +114,21 @@ const port = process.env.PORT || 3000;
 app.listen(port, () => {
     console.log(`Server listening on port ${port}.`);
 });
+
+
+//jamila
+//patient data - done
+//doctor data - done
+//channelling_doctor
+
+//umeen
+//medicine
+//check stock
+
+//pathum
+//assistant details
+//medicine data
+
+//TODO tables
+//attendance
+//returning and none table
