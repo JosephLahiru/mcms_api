@@ -99,9 +99,9 @@ app.get('/get_patients/:p_id', (req, res) => {
 
 //Set Patients
 app.post('/set_patients', (req, res) => {
-    const { p_id, first_name, last_name, nic, age, p_type, gender, app_date, contact_no, address } = req.body;
-    const sql = 'INSERT INTO patient (p_id, first_name, last_name, nic, age, p_type, gender, app_date, contact_no, address) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
-    db.query(sql, [p_id, first_name, last_name, nic, age, p_type, gender, app_date, contact_no, address], (err, result) => {
+    const {first_name, last_name, nic, age, p_type, gender, app_date, contact_no, address } = req.body;
+    const sql = 'INSERT INTO patient (first_name, last_name, nic, age, p_type, gender, app_date, contact_no, address) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)';
+    db.query(sql, [first_name, last_name, nic, age, p_type, gender, app_date, contact_no, address], (err, result) => {
         if (err) {
             console.error('Error executing query: ', err);
             res.status(500).json({ error: 'Internal server error.' + err });
@@ -175,7 +175,3 @@ app.listen(port, () => {
 //pathum
 //assistant details
 //medicine data
-
-//TODO tables
-//attendance
-//returning and none table
