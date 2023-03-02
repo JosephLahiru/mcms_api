@@ -189,6 +189,20 @@ app.get('/get_medicine/:med_id', (req, res) => {
     });
 });
 
+//Set Medicine
+app.post('/set_medicine', (req, res) => {
+    const { med_id, m_name, m_type, description, ex_date, med_brand} = req.body;
+    const sql = 'INSERT INTO medicine (med_id, m_name, m_type, description, ex_date, med_brand) VALUES (?, ?, ?, ?, ?, ?)';
+    db.query(sql, [med_id, m_name, m_type, description, ex_date, med_brand], (err, result) => {
+        if (err) {
+            console.error('Error executing query: ', err);
+            res.status(500).json({ error: 'Internal server error.' + err});
+            return;
+        }
+        res.json({ message: 'Medicine added successfully.' });
+    });
+});
+
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
     console.log(`Server listening on port ${port}.`);
