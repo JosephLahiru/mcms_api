@@ -170,6 +170,25 @@ app.get('/get_medicine', (req, res) => {
     });
 });
 
+//Get Medicine By ID
+app.get('/get_medicine/:med_id', (req, res) => {
+    const med_id = req.params.med_id;
+    const med_idRegex = /^M\d{3}$/;
+    if (!med_idRegex.test(med_id)) {
+        res.status(400).json({ error: 'Invalid Medicine ID format.' });
+        return;
+    }
+    const sql = 'SELECT * FROM medicine WHERE med_id = ?';
+    db.query(sql, [med_id], (err, result) => {
+        if (err) {
+            console.error('Error executing query: ', err);
+            res.status(500).json({ error: 'Internal server error.' + err });
+            return;
+        }
+        res.json(result);
+    });
+});
+
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
     console.log(`Server listening on port ${port}.`);
