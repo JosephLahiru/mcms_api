@@ -78,15 +78,15 @@ app.get('/get_patients', (req, res) => {
     });
 });
 
-//Get Patients By ID
-app.get('/get_patients/:p_id', (req, res) => {
-    const d_id = req.params.d_id;
-    const d_idRegex = /^P\d{3}$/;
-    if (!d_idRegex.test(d_id)) {
-        res.status(400).json({ error: 'Invalid patient ID format.' });
+//Get Patients By NIC
+app.get('/get_patients/:nic', (req, res) => {
+    const nic = req.params.nic;
+    const nicRegex = /^([0-9]{9}[x|X|v|V]|[0-9]{12})$/;
+    if (!nicRegex.test(nic)) {
+        res.status(400).json({ error: 'Invalid NIC format.' });
         return;
     }
-    const sql = 'SELECT * FROM patient WHERE p_id = ?';
+    const sql = 'SELECT * FROM patient WHERE nic = ?';
     db.query(sql, [d_id], (err, result) => {
         if (err) {
             console.error('Error executing query: ', err);
