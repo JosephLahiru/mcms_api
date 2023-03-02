@@ -43,6 +43,24 @@ app.get('/get_patients', (req, res) => {
     });
 });
 
+app.get('/get_patients/:p_id', (req, res) => {
+    const d_id = req.params.d_id;
+    const d_idRegex = /^P\d{3}$/;
+    if (!d_idRegex.test(d_id)) {
+        res.status(400).json({ error: 'Invalid patient ID format.' });
+        return;
+    }
+    const sql = 'SELECT * FROM patient WHERE p_id = ?';
+    db.query(sql, [d_id], (err, result) => {
+        if (err) {
+            console.error('Error executing query: ', err);
+            res.status(500).json({ error: 'Internal server error.' + err });
+            return;
+        }
+        res.json(result);
+    });
+});
+
 app.get('/get_doctors/:d_id', (req, res) => {
     const d_id = req.params.d_id;
     const d_idRegex = /^D\d{3}$/;
