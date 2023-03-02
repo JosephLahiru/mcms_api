@@ -97,6 +97,20 @@ app.get('/get_patients/:p_id', (req, res) => {
     });
 });
 
+//Set Patients
+app.post('/set_patients', (req, res) => {
+    const { p_id, first_name, last_name, nic, age, p_type, gender, app_date, contact_no, address } = req.body;
+    const sql = 'INSERT INTO patient (p_id, first_name, last_name, nic, age, p_type, gender, app_date, contact_no, address) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+    db.query(sql, [p_id, first_name, last_name, nic, age, p_type, gender, app_date, contact_no, address], (err, result) => {
+        if (err) {
+            console.error('Error executing query: ', err);
+            res.status(500).json({ error: 'Internal server error.' + err });
+            return;
+        }
+        res.json({ message: 'Patient added successfully.' });
+    });
+});
+
 //Get Earnings
 app.get('/get_earnings', (req, res) => {
     const sql = 'SELECT * FROM earnings';
