@@ -87,7 +87,7 @@ app.get('/get_patients/:nic', (req, res) => {
         return;
     }
     const sql = 'SELECT * FROM patient WHERE nic = ?';
-    db.query(sql, [d_id], (err, result) => {
+    db.query(sql, [nic], (err, result) => {
         if (err) {
             console.error('Error executing query: ', err);
             res.status(500).json({ error: 'Internal server error.' + err });
