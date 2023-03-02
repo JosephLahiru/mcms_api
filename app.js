@@ -19,6 +19,7 @@ app.get('/', (req, res) => {
     res.send('Hello, world!');
 });
 
+//Get Doctors
 app.get('/get_doctors', (req, res) => {
     const sql = 'SELECT * FROM doctor';
     db.query(sql, (err, result) => {
@@ -31,36 +32,7 @@ app.get('/get_doctors', (req, res) => {
     });
 });
 
-app.get('/get_patients', (req, res) => {
-    const sql = 'SELECT * FROM patient';
-    db.query(sql, (err, result) => {
-        if (err) {
-            console.error('Error executing query: ', err);
-            res.status(500).json({ error: 'Internal server error.' + err   });
-            return;
-        }
-        res.json(result);
-    });
-});
-
-app.get('/get_patients/:p_id', (req, res) => {
-    const d_id = req.params.d_id;
-    const d_idRegex = /^P\d{3}$/;
-    if (!d_idRegex.test(d_id)) {
-        res.status(400).json({ error: 'Invalid patient ID format.' });
-        return;
-    }
-    const sql = 'SELECT * FROM patient WHERE p_id = ?';
-    db.query(sql, [d_id], (err, result) => {
-        if (err) {
-            console.error('Error executing query: ', err);
-            res.status(500).json({ error: 'Internal server error.' + err });
-            return;
-        }
-        res.json(result);
-    });
-});
-
+//Get Doctors By ID
 app.get('/get_doctors/:d_id', (req, res) => {
     const d_id = req.params.d_id;
     const d_idRegex = /^D\d{3}$/;
@@ -79,6 +51,7 @@ app.get('/get_doctors/:d_id', (req, res) => {
     });
 });
 
+//Set Doctors
 app.post('/set_doctors', (req, res) => {
     const { d_id, first_name, last_name, nic, email, address, contact_no } = req.body;
     const sql = 'INSERT INTO doctor (d_id, first_name, last_name, nic, email, address, contact_no) VALUES (?, ?, ?, ?, ?, ?, ?)';
@@ -92,6 +65,39 @@ app.post('/set_doctors', (req, res) => {
     });
 });
 
+//Get Patients
+app.get('/get_patients', (req, res) => {
+    const sql = 'SELECT * FROM patient';
+    db.query(sql, (err, result) => {
+        if (err) {
+            console.error('Error executing query: ', err);
+            res.status(500).json({ error: 'Internal server error.' + err   });
+            return;
+        }
+        res.json(result);
+    });
+});
+
+//Get Patients By ID
+app.get('/get_patients/:p_id', (req, res) => {
+    const d_id = req.params.d_id;
+    const d_idRegex = /^P\d{3}$/;
+    if (!d_idRegex.test(d_id)) {
+        res.status(400).json({ error: 'Invalid patient ID format.' });
+        return;
+    }
+    const sql = 'SELECT * FROM patient WHERE p_id = ?';
+    db.query(sql, [d_id], (err, result) => {
+        if (err) {
+            console.error('Error executing query: ', err);
+            res.status(500).json({ error: 'Internal server error.' + err });
+            return;
+        }
+        res.json(result);
+    });
+});
+
+//Get Earnings
 app.get('/get_earnings', (req, res) => {
     const sql = 'SELECT * FROM earnings';
     db.query(sql, (err, result) => {
@@ -104,19 +110,7 @@ app.get('/get_earnings', (req, res) => {
     });
 });
 
-app.post('/set_earnings', (req, res) => {
-    const { date, free_amt, ac_cost_free, paid_amt, ac_cost_paid, profit} = req.body;
-    const sql = 'INSERT INTO earnings (date, free_amt, ac_cost_free, paid_amt, ac_cost_paid, profit) VALUES (?, ?, ?, ?, ?, ?)';
-    db.query(sql, [date, free_amt, ac_cost_free, paid_amt, ac_cost_paid, profit], (err, result) => {
-        if (err) {
-            console.error('Error executing query: ', err);
-            res.status(500).json({ error: 'Internal server error.' + err});
-            return;
-        }
-        res.json({ message: 'Earning added successfully.' });
-    });
-});
-
+//Get Earnings By ID
 app.get('/get_earnings/:date', (req, res) => {
     const date = req.params.date;
     const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
@@ -135,6 +129,19 @@ app.get('/get_earnings/:date', (req, res) => {
     });
 });
 
+//Set Earnings
+app.post('/set_earnings', (req, res) => {
+    const { date, free_amt, ac_cost_free, paid_amt, ac_cost_paid, profit} = req.body;
+    const sql = 'INSERT INTO earnings (date, free_amt, ac_cost_free, paid_amt, ac_cost_paid, profit) VALUES (?, ?, ?, ?, ?, ?)';
+    db.query(sql, [date, free_amt, ac_cost_free, paid_amt, ac_cost_paid, profit], (err, result) => {
+        if (err) {
+            console.error('Error executing query: ', err);
+            res.status(500).json({ error: 'Internal server error.' + err});
+            return;
+        }
+        res.json({ message: 'Earning added successfully.' });
+    });
+});
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
