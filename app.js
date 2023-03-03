@@ -235,6 +235,20 @@ app.get('/get_attendance/:assit_id/:date', (req, res) => {
     });
 });
 
+//Set Attendance
+app.post('/set_attendance', (req, res) => {
+    const { assit_id, date, status } = req.body;
+    const sql = 'INSERT INTO attendance (assit_id, date, status) VALUES (?, ?, ?)';
+    db.query(sql, [assit_id, date, status], (err, result) => {
+        if (err) {
+            console.error('Error executing query: ', err);
+            res.status(500).json({ error: 'Internal server error.' + err});
+            return;
+        }
+        res.json({ message: 'Attendance added successfully.' });
+    });
+});
+
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
     console.log(`Server listening on port ${port}.`);
