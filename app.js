@@ -216,7 +216,7 @@ app.get('/get_attendance', (req, res) => {
     });
 });
 
-//Get Attendance By ID
+//Get Attendance By ID and Date
 app.get('/get_attendance/:assit_id/:date', (req, res) => {
     const assit_id = req.params.assit_id;
     const assit_idRegex = /^A\d{3}$/;
