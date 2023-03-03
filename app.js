@@ -203,6 +203,19 @@ app.post('/set_medicine', (req, res) => {
     });
 });
 
+//Get Attendance
+app.get('/get_attendance', (req, res) => {
+    const sql = 'SELECT * FROM attendance';
+    db.query(sql, (err, result) => {
+        if (err) {
+            console.error('Error executing query: ', err);
+            res.status(500).json({ error: 'Internal server error.' + err  });
+            return;
+        }
+        res.json(result);
+    });
+});
+
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
     console.log(`Server listening on port ${port}.`);
