@@ -16,7 +16,7 @@ app.use(bodyParser.json());
 app.use(cors(corsOptions));
 
 app.get('/', (req, res) => {
-    res.send('Hello, world!');
+    res.send('Hi!, I am Online!!!');
 });
 
 //Get Doctors
@@ -145,7 +145,7 @@ app.get('/get_earnings/:date', (req, res) => {
 
 //Set Earnings
 app.post('/set_earnings', (req, res) => {
-    const { date, free_amt, ac_cost_free, paid_amt, ac_cost_paid, profit} = req.body;
+    const { date, free_amt, ac_cost_free, paid_amt, ac_cost_paid, profit } = req.body;
     const sql = 'INSERT INTO earnings (date, free_amt, ac_cost_free, paid_amt, ac_cost_paid, profit) VALUES (?, ?, ?, ?, ?, ?)';
     db.query(sql, [date, free_amt, ac_cost_free, paid_amt, ac_cost_paid, profit], (err, result) => {
         if (err) {
@@ -191,7 +191,7 @@ app.get('/get_medicine/:med_id', (req, res) => {
 
 //Set Medicine
 app.post('/set_medicine', (req, res) => {
-    const { med_id, m_name, m_type, description, ex_date, med_brand} = req.body;
+    const { med_id, m_name, m_type, description, ex_date, med_brand } = req.body;
     const sql = 'INSERT INTO medicine (med_id, m_name, m_type, description, ex_date, med_brand) VALUES (?, ?, ?, ?, ?, ?)';
     db.query(sql, [med_id, m_name, m_type, description, ex_date, med_brand], (err, result) => {
         if (err) {
@@ -267,3 +267,4 @@ app.listen(port, () => {
 //pathum
 //assistant details
 //medicine data
+//attendance - done
