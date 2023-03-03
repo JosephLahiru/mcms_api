@@ -281,6 +281,20 @@ app.get('/get_appointment/:nic', (req, res) => {
     });
 });
 
+//Set Appointment
+app.post('/set_appointment', (req, res) => {
+    const { first_name, last_name, nic, address, age, gender, contact_num, email, p_type, cd_id } = req.body;
+    const sql = 'INSERT INTO appointment (first_name, last_name, nic, address, age, gender, contact_num, email, p_type, cd_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+    db.query(sql, [first_name, last_name, nic, address, age, gender, contact_num, email, p_type, cd_id], (err, result) => {
+        if (err) {
+            console.error('Error executing query: ', err);
+            res.status(500).json({ error: 'Internal server error.' + err});
+            return;
+        }
+        res.json({ message: 'Appointment added successfully.' });
+    });
+});
+
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
     console.log(`Server listening on port ${port}.`);
