@@ -262,6 +262,25 @@ app.get('/get_appointment', (req, res) => {
     });
 });
 
+//Get Appointment By NIC
+app.get('/get_appointment/:nic', (req, res) => {
+    const nic = req.params.nic;
+    const nicRegex = /^([0-9]{9}[x|X|v|V]|[0-9]{12})$/;
+    if (!nicRegex.test(nic)) {
+        res.status(400).json({ error: 'Invalid NIC format.' });
+        return;
+    }
+    const sql = 'SELECT * FROM appointment WHERE nic = ?';
+    db.query(sql, [nic], (err, result) => {
+        if (err) {
+            console.error('Error executing query: ', err);
+            res.status(500).json({ error: 'Internal server error.' + err });
+            return;
+        }
+        res.json(result);
+    });
+});
+
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
     console.log(`Server listening on port ${port}.`);
