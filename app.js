@@ -235,6 +235,25 @@ app.get('/get_attendance/:assit_id', (req, res) => {
     });
 });
 
+//Get Attendance By Date
+app.get('/get_attendance/:date', (req, res) => {
+    const date = req.params.date;
+    const dateRegex = /^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$/;
+    if (!dateRegex.test(date)) {
+        res.status(400).json({ error: 'Invalid Assitant ID format.' });
+        return;
+    }
+    const sql = 'SELECT * FROM attendance WHERE date = ?';
+    db.query(sql, [date], (err, result) => {
+        if (err) {
+            console.error('Error executing query: ', err);
+            res.status(500).json({ error: 'Internal server error.' + err });
+            return;
+        }
+        res.json(result);
+    });
+});
+
 //Get Attendance By ID and Date
 app.get('/get_attendance/:assit_id/:date', (req, res) => {
     const assit_id = req.params.assit_id;
