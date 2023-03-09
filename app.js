@@ -347,6 +347,20 @@ app.get('/get_notification', (req, res) => {
     });
 });
 
+//Set Notification
+app.post('/set_notification', (req, res) => {
+    const { body, field } = req.body;
+    const sql = 'INSERT INTO notification (body, field) VALUES (?, ?)';
+    db.query(sql, [body, field], (err, result) => {
+        if (err) {
+            console.error('Error executing query: ', err);
+            res.status(500).json({ error: 'Internal server error.' + err});
+            return;
+        }
+        res.json({ message: 'Notification added successfully.' });
+    });
+});
+
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
     console.log(`Server listening on port ${port}.`);
