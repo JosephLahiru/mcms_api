@@ -349,9 +349,9 @@ app.get('/get_notification', (req, res) => {
 
 //Set Notification
 app.post('/set_notification', (req, res) => {
-    const { body, field } = req.body;
-    const sql = 'INSERT INTO notification (body, field) VALUES (?, ?)';
-    db.query(sql, [body, field], (err, result) => {
+    const { body, category } = req.body;
+    const sql = 'INSERT INTO notification (body, category) VALUES (?, ?)';
+    db.query(sql, [body, category], (err, result) => {
         if (err) {
             console.error('Error executing query: ', err);
             res.status(500).json({ error: 'Internal server error.' + err});
@@ -365,18 +365,3 @@ const port = process.env.PORT || 3000;
 app.listen(port, () => {
     console.log(`Server listening on port ${port}.`);
 });
-
-
-//jamila
-//patient data - done
-//doctor data - done
-//channelling_doctor
-
-//umeen
-//medicine
-//check stock
-
-//pathum
-//assistant details
-//medicine data
-//attendance - done
