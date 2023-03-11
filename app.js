@@ -124,7 +124,7 @@ app.get('/get_earnings', (req, res) => {
     });
 });
 
-//Get Earnings By ID
+//Get Earnings By Date
 app.get('/get_earnings/:date', (req, res) => {
     const date = req.params.date;
     const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
@@ -145,9 +145,9 @@ app.get('/get_earnings/:date', (req, res) => {
 
 //Set Earnings
 app.post('/set_earnings', (req, res) => {
-    const { date, free_amt, ac_cost_free, paid_amt, ac_cost_paid, profit } = req.body;
-    const sql = 'INSERT INTO earnings (date, free_amt, ac_cost_free, paid_amt, ac_cost_paid, profit) VALUES (?, ?, ?, ?, ?, ?)';
-    db.query(sql, [date, free_amt, ac_cost_free, paid_amt, ac_cost_paid, profit], (err, result) => {
+    const { date, selling_cost_free_med, actual_cost_free_med, selling_cost_issued_med, actual_cost_issued_med, daily_profit } = req.body;
+    const sql = 'INSERT INTO earnings (date, selling_cost_free_med, actual_cost_free_med, selling_cost_issued_med, actual_cost_issued_med, daily_profit) VALUES (?, ?, ?, ?, ?, ?)';
+    db.query(sql, [date, selling_cost_free_med, actual_cost_free_med, selling_cost_issued_med, actual_cost_issued_med, daily_profit], (err, result) => {
         if (err) {
             console.error('Error executing query: ', err);
             res.status(500).json({ error: 'Internal server error.' + err});
