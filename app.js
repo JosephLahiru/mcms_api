@@ -153,7 +153,7 @@ app.post('/set_profit', (req, res) => {
             res.status(500).json({ error: 'Internal server error.' + err});
             return;
         }
-        res.json({ message: 'Earning added successfully.' });
+        res.json({ message: 'Profit added successfully.' });
     });
 });
 
