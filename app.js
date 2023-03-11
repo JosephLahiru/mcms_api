@@ -111,9 +111,9 @@ app.post('/set_patients', (req, res) => {
     });
 });
 
-//Get Earnings
-app.get('/get_earnings', (req, res) => {
-    const sql = 'SELECT * FROM earnings';
+//Get Profit
+app.get('/get_profit', (req, res) => {
+    const sql = 'SELECT * FROM profit';
     db.query(sql, (err, result) => {
         if (err) {
             console.error('Error executing query: ', err);
@@ -124,15 +124,15 @@ app.get('/get_earnings', (req, res) => {
     });
 });
 
-//Get Earnings By Date
-app.get('/get_earnings/:date', (req, res) => {
+//Get Profit By Date
+app.get('/get_profit/:date', (req, res) => {
     const date = req.params.date;
     const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
     if (!dateRegex.test(date)) {
         res.status(400).json({ error: 'Invalid date format.' });
         return;
     }
-    const sql = 'SELECT * FROM earnings WHERE date = ?';
+    const sql = 'SELECT * FROM profit WHERE date = ?';
     db.query(sql, [date], (err, result) => {
         if (err) {
             console.error('Error executing query: ', err);
@@ -143,10 +143,10 @@ app.get('/get_earnings/:date', (req, res) => {
     });
 });
 
-//Set Earnings
-app.post('/set_earnings', (req, res) => {
+//Set Profit
+app.post('/set_profit', (req, res) => {
     const { date, selling_cost_free_med, actual_cost_free_med, selling_cost_issued_med, actual_cost_issued_med, daily_profit } = req.body;
-    const sql = 'INSERT INTO earnings (date, selling_cost_free_med, actual_cost_free_med, selling_cost_issued_med, actual_cost_issued_med, daily_profit) VALUES (?, ?, ?, ?, ?, ?)';
+    const sql = 'INSERT INTO profit (date, selling_cost_free_med, actual_cost_free_med, selling_cost_issued_med, actual_cost_issued_med, daily_profit) VALUES (?, ?, ?, ?, ?, ?)';
     db.query(sql, [date, selling_cost_free_med, actual_cost_free_med, selling_cost_issued_med, actual_cost_issued_med, daily_profit], (err, result) => {
         if (err) {
             console.error('Error executing query: ', err);
