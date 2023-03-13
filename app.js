@@ -143,6 +143,25 @@ app.get('/get_profit/:date', (req, res) => {
     });
 });
 
+//Get Weekly Profit
+app.get('/get_weekly_profit/:date', (req, res) => {
+    const date = req.params.date;
+    const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
+    if (!dateRegex.test(date)) {
+        res.status(400).json({ error: 'Invalid date format.' });
+        return;
+    }
+    const sql = "SELECT SUM(CAST(selling_cost_free_med AS DECIMAL(20,2))) AS selling_cost_free_med, SUM(CAST(actual_cost_free_med AS DECIMAL(20,2))) AS actual_cost_free_med, SUM(CAST(selling_cost_issued_med AS DECIMAL(20,2))) AS selling_cost_issued_med, SUM(CAST(actual_cost_issued_med AS DECIMAL(20,2))) AS actual_cost_issued_med, SUM(CAST(daily_profit AS DECIMAL(20,2))) AS total_profit FROM profit WHERE date BETWEEN DATE_SUB('?', INTERVAL 6 DAY) AND '?';";
+    db.query(sql, [date, date], (err, result) => {
+        if (err) {
+            console.error('Error executing query: ', err);
+            res.status(500).json({ error: 'Internal server error.' + err });
+            return;
+        }
+        res.json(result);
+    });
+});
+
 //Set Profit
 app.post('/set_profit', (req, res) => {
     const { date, selling_cost_free_med, actual_cost_free_med, selling_cost_issued_med, actual_cost_issued_med, daily_profit } = req.body;
