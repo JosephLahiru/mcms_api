@@ -151,7 +151,7 @@ app.get('/get_weekly_profit/:date', (req, res) => {
         res.status(400).json({ error: 'Invalid date format.' });
         return;
     }
-    const sql = "SELECT SUM(CAST(selling_cost_free_med AS DECIMAL(20,2))) AS selling_cost_free_med, SUM(CAST(actual_cost_free_med AS DECIMAL(20,2))) AS actual_cost_free_med, SUM(CAST(selling_cost_issued_med AS DECIMAL(20,2))) AS selling_cost_issued_med, SUM(CAST(actual_cost_issued_med AS DECIMAL(20,2))) AS actual_cost_issued_med, SUM(CAST(daily_profit AS DECIMAL(20,2))) AS total_profit FROM profit WHERE date BETWEEN DATE_SUB('?', INTERVAL 6 DAY) AND '?';";
+    const sql = "SELECT SUM(CAST(selling_cost_free_med AS DECIMAL(20,2))) AS selling_cost_free_med, SUM(CAST(actual_cost_free_med AS DECIMAL(20,2))) AS actual_cost_free_med, SUM(CAST(selling_cost_issued_med AS DECIMAL(20,2))) AS selling_cost_issued_med, SUM(CAST(actual_cost_issued_med AS DECIMAL(20,2))) AS actual_cost_issued_med, SUM(CAST(daily_profit AS DECIMAL(20,2))) AS total_profit FROM profit WHERE date BETWEEN DATE_SUB(?, INTERVAL 6 DAY) AND ?;";
     db.query(sql, [date, date], (err, result) => {
         if (err) {
             console.error('Error executing query: ', err);
@@ -170,7 +170,7 @@ app.get('/get_monthly_profit/:date', (req, res) => {
         res.status(400).json({ error: 'Invalid date format.' });
         return;
     }
-    const sql = "SELECT SUM(CAST(selling_cost_free_med AS DECIMAL(20,2))) AS selling_cost_free_med, SUM(CAST(actual_cost_free_med AS DECIMAL(20,2))) AS actual_cost_free_med, SUM(CAST(selling_cost_issued_med AS DECIMAL(20,2))) AS selling_cost_issued_med, SUM(CAST(actual_cost_issued_med AS DECIMAL(20,2))) AS actual_cost_issued_med, SUM(CAST(daily_profit AS DECIMAL(20,2))) AS total_profit FROM profit WHERE date BETWEEN DATE_SUB('?', INTERVAL 29 DAY) AND '?';";
+    const sql = "SELECT SUM(CAST(selling_cost_free_med AS DECIMAL(20,2))) AS selling_cost_free_med, SUM(CAST(actual_cost_free_med AS DECIMAL(20,2))) AS actual_cost_free_med, SUM(CAST(selling_cost_issued_med AS DECIMAL(20,2))) AS selling_cost_issued_med, SUM(CAST(actual_cost_issued_med AS DECIMAL(20,2))) AS actual_cost_issued_med, SUM(CAST(daily_profit AS DECIMAL(20,2))) AS total_profit FROM profit WHERE date BETWEEN DATE_SUB(?, INTERVAL 29 DAY) AND ?;";
     db.query(sql, [date, date], (err, result) => {
         if (err) {
             console.error('Error executing query: ', err);
