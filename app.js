@@ -10,7 +10,7 @@ const corsOptions = {
     methods: 'GET,POST',
     allowedHeaders: 'Content-Type,Authorization',
 };
-  
+
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cors(corsOptions));
@@ -25,7 +25,7 @@ app.get('/get_doctors', (req, res) => {
     db.query(sql, (err, result) => {
         if (err) {
             console.error('Error executing query: ', err);
-            res.status(500).json({ error: 'Internal server error.' + err   });
+            res.status(500).json({ error: 'Internal server error.' + err });
             return;
         }
         res.json(result);
@@ -71,7 +71,7 @@ app.get('/get_patients', (req, res) => {
     db.query(sql, (err, result) => {
         if (err) {
             console.error('Error executing query: ', err);
-            res.status(500).json({ error: 'Internal server error.' + err   });
+            res.status(500).json({ error: 'Internal server error.' + err });
             return;
         }
         res.json(result);
@@ -99,7 +99,7 @@ app.get('/get_patients/:nic', (req, res) => {
 
 //Set Patients
 app.post('/set_patients', (req, res) => {
-    const {first_name, last_name, nic, age, p_type, gender, app_date, contact_no, address } = req.body;
+    const { first_name, last_name, nic, age, p_type, gender, app_date, contact_no, address } = req.body;
     const sql = 'INSERT INTO patient (first_name, last_name, nic, age, p_type, gender, app_date, contact_no, address) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)';
     db.query(sql, [first_name, last_name, nic, age, p_type, gender, app_date, contact_no, address], (err, result) => {
         if (err) {
@@ -117,7 +117,7 @@ app.get('/get_profit', (req, res) => {
     db.query(sql, (err, result) => {
         if (err) {
             console.error('Error executing query: ', err);
-            res.status(500).json({ error: 'Internal server error.' + err  });
+            res.status(500).json({ error: 'Internal server error.' + err });
             return;
         }
         res.json(result);
@@ -188,7 +188,7 @@ app.post('/set_profit', (req, res) => {
     db.query(sql, [date, selling_cost_free_med, actual_cost_free_med, selling_cost_issued_med, actual_cost_issued_med, daily_profit], (err, result) => {
         if (err) {
             console.error('Error executing query: ', err);
-            res.status(500).json({ error: 'Internal server error.' + err});
+            res.status(500).json({ error: 'Internal server error.' + err });
             return;
         }
         res.json({ message: 'Profit added successfully.' });
@@ -201,7 +201,7 @@ app.get('/get_medicine', (req, res) => {
     db.query(sql, (err, result) => {
         if (err) {
             console.error('Error executing query: ', err);
-            res.status(500).json({ error: 'Internal server error.' + err  });
+            res.status(500).json({ error: 'Internal server error.' + err });
             return;
         }
         res.json(result);
@@ -234,7 +234,7 @@ app.post('/set_medicine', (req, res) => {
     db.query(sql, [med_id, m_name, m_type, description, ex_date, med_brand], (err, result) => {
         if (err) {
             console.error('Error executing query: ', err);
-            res.status(500).json({ error: 'Internal server error.' + err});
+            res.status(500).json({ error: 'Internal server error.' + err });
             return;
         }
         res.json({ message: 'Medicine added successfully.' });
@@ -247,7 +247,7 @@ app.get('/get_attendance', (req, res) => {
     db.query(sql, (err, result) => {
         if (err) {
             console.error('Error executing query: ', err);
-            res.status(500).json({ error: 'Internal server error.' + err  });
+            res.status(500).json({ error: 'Internal server error.' + err });
             return;
         }
         res.json(result);
@@ -319,7 +319,7 @@ app.post('/set_attendance', (req, res) => {
     db.query(sql, [assit_id, date, status], (err, result) => {
         if (err) {
             console.error('Error executing query: ', err);
-            res.status(500).json({ error: 'Internal server error.' + err});
+            res.status(500).json({ error: 'Internal server error.' + err });
             return;
         }
         res.json({ message: 'Attendance added successfully.' });
@@ -332,7 +332,7 @@ app.get('/get_appointment', (req, res) => {
     db.query(sql, (err, result) => {
         if (err) {
             console.error('Error executing query: ', err);
-            res.status(500).json({ error: 'Internal server error.' + err  });
+            res.status(500).json({ error: 'Internal server error.' + err });
             return;
         }
         res.json(result);
@@ -365,7 +365,7 @@ app.post('/set_appointment', (req, res) => {
     db.query(sql, [first_name, last_name, nic, address, age, gender, contact_num, email, p_type, cd_id], (err, result) => {
         if (err) {
             console.error('Error executing query: ', err);
-            res.status(500).json({ error: 'Internal server error.' + err});
+            res.status(500).json({ error: 'Internal server error.' + err });
             return;
         }
         res.json({ message: 'Appointment added successfully.' });
@@ -378,7 +378,7 @@ app.get('/get_notification', (req, res) => {
     db.query(sql, (err, result) => {
         if (err) {
             console.error('Error executing query: ', err);
-            res.status(500).json({ error: 'Internal server error.' + err  });
+            res.status(500).json({ error: 'Internal server error.' + err });
             return;
         }
         res.json(result);
@@ -392,10 +392,23 @@ app.post('/set_notification', (req, res) => {
     db.query(sql, [body, category], (err, result) => {
         if (err) {
             console.error('Error executing query: ', err);
-            res.status(500).json({ error: 'Internal server error.' + err});
+            res.status(500).json({ error: 'Internal server error.' + err });
             return;
         }
         res.json({ message: 'Notification added successfully.' });
+    });
+});
+
+//Get Stock
+app.get('/get_stock', (req, res) => {
+    const sql = 'SELECT * FROM stock';
+    db.query(sql, (err, result) => {
+        if (err) {
+            console.error('Error executing query: ', err);
+            res.status(500).json({ error: 'Internal server error.' + err });
+            return;
+        }
+        res.json(result);
     });
 });
 
