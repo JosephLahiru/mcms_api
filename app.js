@@ -412,6 +412,25 @@ app.get('/get_stock', (req, res) => {
     });
 });
 
+//Get Stock By Prod ID
+app.get('/get_stock/:prdct_id', (req, res) => {
+    const prdct_id = req.params.prdct_id;
+    const prdct_idRegex = /^P\d{3}$/;
+    if (!prdct_idRegex.test(prdct_id)) {
+        res.status(400).json({ error: 'Invalid Product ID format.' });
+        return;
+    }
+    const sql = 'SELECT * FROM stock WHERE prdct_id = ?';
+    db.query(sql, [prdct_id], (err, result) => {
+        if (err) {
+            console.error('Error executing query: ', err);
+            res.status(500).json({ error: 'Internal server error.' + err });
+            return;
+        }
+        res.json(result);
+    });
+});
+
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
     console.log(`Server listening on port ${port}.`);
