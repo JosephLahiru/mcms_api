@@ -415,7 +415,7 @@ app.get('/get_stock', (req, res) => {
 //Get Stock By Prod ID
 app.get('/get_stock/:prdct_id', (req, res) => {
     const prdct_id = req.params.prdct_id;
-    const prdct_idRegex = /^P\d{3}$/;
+    const prdct_idRegex = /^(?:[1-9]|[1-9]\d{1,2}|999)$/;
     if (!prdct_idRegex.test(prdct_id)) {
         res.status(400).json({ error: 'Invalid Product ID format.' });
         return;
