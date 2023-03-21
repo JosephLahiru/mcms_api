@@ -431,6 +431,20 @@ app.get('/get_stock/:prdct_id', (req, res) => {
     });
 });
 
+//Set Stock
+app.post('/set_stock', (req, res) => {
+    const { prdct_id, prdct_name, description, mfg_date, exp_date, ac_price, sell_price, amount, med_type } = req.body;
+    const sql = 'INSERT INTO stock (prdct_id, prdct_name, description, mfg_date, exp_date, ac_price, sell_price, amount, med_type) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)';
+    db.query(sql, [prdct_id, prdct_name, description, mfg_date, exp_date, ac_price, sell_price, amount, med_type], (err, result) => {
+        if (err) {
+            console.error('Error executing query: ', err);
+            res.status(500).json({ error: 'Internal server error.' + err });
+            return;
+        }
+        res.json({ message: 'Stock added successfully.' });
+    });
+});
+
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
     console.log(`Server listening on port ${port}.`);
