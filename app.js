@@ -399,6 +399,25 @@ app.post('/set_stock', (req, res) => {
     });
 });
 
+//SET Ping
+app.post('/set_ping/:data', (req, res) => {
+    const data = req.params.prdct_id;
+    if (data != "PING") {
+        res.status(400).json({ error: 'Invalid Ping format.' });
+        return;
+    }
+    const { ping } = req.body;
+    const sql = 'INSERT INTO ping (ping) VALUES (?)';
+    db.query(sql, [ping], (err, result) => {
+        if (err) {
+            console.error('Error executing query: ', err);
+            res.status(500).json({ error: 'Internal server error.' + err });
+            return;
+        }
+        res.json({ message: 'Pingged successfully.' });
+    });
+});
+
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
     console.log(`Server listening on port ${port}.`);
