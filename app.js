@@ -400,7 +400,7 @@ app.post('/set_stock', (req, res) => {
 });
 
 //SET Ping
-app.post('/set_ping/:data', (req, res) => {
+app.post('/set_ping', (req, res) => {
     const { data } = req.body;
     const sql = 'INSERT INTO ping (data) VALUES (?)';
     db.query(sql, [data], (err, result) => {
