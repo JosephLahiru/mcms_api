@@ -401,11 +401,6 @@ app.post('/set_stock', (req, res) => {
 
 //SET Ping
 app.post('/set_ping/:data', (req, res) => {
-    const data = req.params.prdct_id;
-    if (data != "PING") {
-        res.status(400).json({ error: 'Invalid Ping format.' });
-        return;
-    }
     const { ping } = req.body;
     const sql = 'INSERT INTO ping (ping) VALUES (?)';
     db.query(sql, [ping], (err, result) => {
