@@ -401,9 +401,9 @@ app.post('/set_stock', (req, res) => {
 
 //SET Ping
 app.post('/set_ping/:data', (req, res) => {
-    const { ping } = req.body;
-    const sql = 'INSERT INTO ping (ping) VALUES (?)';
-    db.query(sql, [ping], (err, result) => {
+    const { data } = req.body;
+    const sql = 'INSERT INTO ping (data) VALUES (?)';
+    db.query(sql, [data], (err, result) => {
         if (err) {
             console.error('Error executing query: ', err);
             res.status(500).json({ error: 'Internal server error.' + err });
