@@ -195,52 +195,6 @@ app.post('/set_profit', (req, res) => {
     });
 });
 
-// //Get Medicine
-// app.get('/get_medicine', (req, res) => {
-//     const sql = 'SELECT * FROM medicine';
-//     db.query(sql, (err, result) => {
-//         if (err) {
-//             console.error('Error executing query: ', err);
-//             res.status(500).json({ error: 'Internal server error.' + err });
-//             return;
-//         }
-//         res.json(result);
-//     });
-// });
-
-// //Get Medicine By ID
-// app.get('/get_medicine/:med_id', (req, res) => {
-//     const med_id = req.params.med_id;
-//     const med_idRegex = /^M\d{3}$/;
-//     if (!med_idRegex.test(med_id)) {
-//         res.status(400).json({ error: 'Invalid Medicine ID format.' });
-//         return;
-//     }
-//     const sql = 'SELECT * FROM medicine WHERE med_id = ?';
-//     db.query(sql, [med_id], (err, result) => {
-//         if (err) {
-//             console.error('Error executing query: ', err);
-//             res.status(500).json({ error: 'Internal server error.' + err });
-//             return;
-//         }
-//         res.json(result);
-//     });
-// });
-
-// //Set Medicine
-// app.post('/set_medicine', (req, res) => {
-//     const { med_id, m_name, m_type, description, ex_date, med_brand } = req.body;
-//     const sql = 'INSERT INTO medicine (med_id, m_name, m_type, description, ex_date, med_brand) VALUES (?, ?, ?, ?, ?, ?)';
-//     db.query(sql, [med_id, m_name, m_type, description, ex_date, med_brand], (err, result) => {
-//         if (err) {
-//             console.error('Error executing query: ', err);
-//             res.status(500).json({ error: 'Internal server error.' + err });
-//             return;
-//         }
-//         res.json({ message: 'Medicine added successfully.' });
-//     });
-// });
-
 //Get Attendance
 app.get('/get_attendance', (req, res) => {
     const sql = 'SELECT * FROM attendance';
@@ -433,9 +387,9 @@ app.get('/get_stock/:prdct_id', (req, res) => {
 
 //Set Stock
 app.post('/set_stock', (req, res) => {
-    const { prdct_id, prdct_name, description, mfg_date, exp_date, ac_price, sell_price, amount, med_type } = req.body;
-    const sql = 'INSERT INTO stock (prdct_id, prdct_name, description, mfg_date, exp_date, ac_price, sell_price, amount, med_type) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)';
-    db.query(sql, [prdct_id, prdct_name, description, mfg_date, exp_date, ac_price, sell_price, amount, med_type], (err, result) => {
+    const { brand_name, prdct_name, description, mfg_date, exp_date, ac_price, sell_price, total_quantity, med_type, total_quantity_ac_price, total_quantity_sell_price } = req.body;
+    const sql = 'INSERT INTO stock (brand_name, prdct_name, description, mfg_date, exp_date, ac_price, sell_price, total_quantity, med_type, total_quantity_ac_price, total_quantity_sell_price) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+    db.query(sql, [brand_name, prdct_name, description, mfg_date, exp_date, ac_price, sell_price, total_quantity, med_type, total_quantity_ac_price, total_quantity_sell_price], (err, result) => {
         if (err) {
             console.error('Error executing query: ', err);
             res.status(500).json({ error: 'Internal server error.' + err });
