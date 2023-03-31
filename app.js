@@ -341,9 +341,9 @@ app.get('/get_notification', (req, res) => {
 
 //Set Notification
 app.post('/set_notification', (req, res) => {
-    const { body, category } = req.body;
-    const sql = 'INSERT INTO notification (body, category) VALUES (?, ?)';
-    db.query(sql, [body, category], (err, result) => {
+    const { body, category, description } = req.body;
+    const sql = 'INSERT INTO notification (body, category, description) VALUES (?, ?, ?)';
+    db.query(sql, [body, category, description], (err, result) => {
         if (err) {
             console.error('Error executing query: ', err);
             res.status(500).json({ error: 'Internal server error.' + err });
