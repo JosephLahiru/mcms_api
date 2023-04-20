@@ -399,6 +399,19 @@ app.post('/set_stock', (req, res) => {
     });
 });
 
+//Get Patient History
+app.get('/get_patient_history', (req, res) => {
+    const sql = 'SELECT * FROM patient_history';
+    db.query(sql, (err, result) => {
+        if (err) {
+            console.error('Error executing query: ', err);
+            res.status(500).json({ error: 'Internal server error.' + err });
+            return;
+        }
+        res.json(result);
+    });
+});
+
 //Set Patient History
 app.post('/set_patient_history', (req, res) => {
     const { nic, first_name, last_name, app_doctor, app_type, app_date, app_time } = req.body;
