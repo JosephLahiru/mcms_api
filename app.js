@@ -399,6 +399,20 @@ app.post('/set_stock', (req, res) => {
     });
 });
 
+//Set Patient History
+app.post('/set_patient_history', (req, res) => {
+    const { nic, first_name, last_name, app_doctor, app_type, app_date, app_time } = req.body;
+    const sql = 'INSERT INTO stock (nic, first_name, last_name, app_doctor, app_type, app_date, app_time) VALUES (?, ?, ?, ?, ?, ?, ?)';
+    db.query(sql, [nic, first_name, last_name, app_doctor, app_type, app_date, app_time], (err, result) => {
+        if (err) {
+            console.error('Error executing query: ', err);
+            res.status(500).json({ error: 'Internal server error.' + err });
+            return;
+        }
+        res.json({ message: 'Patient setted successfully.' });
+    });
+});
+
 //SET Ping
 app.post('/set_ping', (req, res) => {
     const { data } = req.body;
