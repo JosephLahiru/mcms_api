@@ -326,6 +326,8 @@ app.post('/set_appointment', (req, res) => {
     });
 });
 
+// TODO Update appoinment
+
 //Get Notification
 app.get('/get_notification', (req, res) => {
     const sql = 'SELECT * FROM notification';
