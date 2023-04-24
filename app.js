@@ -428,6 +428,19 @@ app.post('/set_patient_history', (req, res) => {
     });
 });
 
+//Get Expire
+app.get('/get_expire', (req, res) => {
+    const sql = 'SELECT * FROM expire';
+    db.query(sql, (err, result) => {
+        if (err) {
+            console.error('Error executing query: ', err);
+            res.status(500).json({ error: 'Internal server error.' + err });
+            return;
+        }
+        res.json(result);
+    });
+});
+
 //SET Ping
 app.post('/set_ping', (req, res) => {
     const { data } = req.body;
