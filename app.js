@@ -401,6 +401,25 @@ app.post('/set_stock', (req, res) => {
     });
 });
 
+//DELETS Stock By Prod ID
+app.get('/delete_stock/:prdct_id', (req, res) => {
+    const prdct_id = req.params.prdct_id;
+    const prdct_idRegex = /^(?:[1-9]|[1-9]\d{1,2}|999)$/;
+    if (!prdct_idRegex.test(prdct_id)) {
+        res.status(400).json({ error: 'Invalid Product ID format.' });
+        return;
+    }
+    const sql = 'DELETE FROM stock WHERE prdct_id = ?';
+    db.query(sql, [prdct_id], (err, result) => {
+        if (err) {
+            console.error('Error executing query: ', err);
+            res.status(500).json({ error: 'Internal server error.' + err });
+            return;
+        }
+        res.json(result);
+    });
+});
+
 //Get Patient History
 app.get('/get_patient_history', (req, res) => {
     const sql = 'SELECT * FROM patient_history';
