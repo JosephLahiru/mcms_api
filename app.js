@@ -460,6 +460,25 @@ app.get('/get_expire', (req, res) => {
     });
 });
 
+//Get Expire By Expire Type
+app.get('/get_expire/:expire_type', (req, res) => {
+    const _type = req.params.expire_type;
+    const _typeRegex = /^[1-9]$/;
+    if (!_typeRegex.test(_type)) {
+        res.status(400).json({ error: 'Invalid Expire Type format.' });
+        return;
+    }
+    const sql = 'SELECT * FROM expire WHERE expire_type = ?';
+    db.query(sql, [_type], (err, result) => {
+        if (err) {
+            console.error('Error executing query: ', err);
+            res.status(500).json({ error: 'Internal server error.' + err });
+            return;
+        }
+        res.json(result);
+    });
+});
+
 //SET Ping
 app.post('/set_ping', (req, res) => {
     const { data } = req.body;
