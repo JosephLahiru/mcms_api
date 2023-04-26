@@ -479,6 +479,25 @@ app.get('/get_expire/:expire_type', (req, res) => {
     });
 });
 
+//Get Stock Low By Stock Type
+app.get('/get_stock_low/:stock_type', (req, res) => {
+    const stock_type = req.params.stock_type;
+    const stock_typeRegex = /^[1-9]$/;
+    if (!stock_typeRegex.test(stock_type)) {
+        res.status(400).json({ error: 'Invalid Stock Type format.' });
+        return;
+    }
+    const sql = 'SELECT * FROM stock_low WHERE stock_type = ?';
+    db.query(sql, [stock_type], (err, result) => {
+        if (err) {
+            console.error('Error executing query: ', err);
+            res.status(500).json({ error: 'Internal server error.' + err });
+            return;
+        }
+        res.json(result);
+    });
+});
+
 //SET Ping
 app.post('/set_ping', (req, res) => {
     const { data } = req.body;
