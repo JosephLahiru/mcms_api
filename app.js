@@ -32,6 +32,19 @@ app.get('/get_doctors', (req, res) => {
     });
 });
 
+//Get Channeling Doctors
+app.get('/get_channelling_doctors', (req, res) => {
+    const sql = 'SELECT * FROM channelling_doctor';
+    db.query(sql, (err, result) => {
+        if (err) {
+            console.error('Error executing query: ', err);
+            res.status(500).json({ error: 'Internal server error.' + err });
+            return;
+        }
+        res.json(result);
+    });
+});
+
 //Get Doctors By ID
 app.get('/get_doctors/:d_id', (req, res) => {
     const d_id = req.params.d_id;
