@@ -325,6 +325,25 @@ app.get('/get_appointment/:nic', (req, res) => {
     });
 });
 
+//Get Appointment By App Num
+app.get('/get_appointment/:app_num', (req, res) => {
+    const app_num = req.params.app_num;
+    const app_numRegex = /^[0-9]$/
+    if (!app_numRegex.test(app_num)) {
+        res.status(400).json({ error: 'Invalid Appoinment Number format.' });
+        return;
+    }
+    const sql = 'SELECT * FROM appointment WHERE app_num = ?';
+    db.query(sql, [app_num], (err, result) => {
+        if (err) {
+            console.error('Error executing query: ', err);
+            res.status(500).json({ error: 'Internal server error.' + err });
+            return;
+        }
+        res.json(result);
+    });
+});
+
 //Set Appointment
 app.post('/set_appointment', (req, res) => {
     const { first_name, last_name, nic, address, age, gender, contact_num, email, p_type, cd_id } = req.body;
