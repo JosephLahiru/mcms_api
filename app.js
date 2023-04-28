@@ -307,7 +307,7 @@ app.get('/get_appointment', (req, res) => {
 });
 
 //Get Appointment By NIC
-app.get('/get_appointment/:nic', (req, res) => {
+app.get('/get_appointment_nic/:nic', (req, res) => {
     const nic = req.params.nic;
     const nicRegex = /^([0-9]{9}[x|X|v|V]|[0-9]{12})$/;
     if (!nicRegex.test(nic)) {
