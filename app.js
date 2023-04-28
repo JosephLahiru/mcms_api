@@ -339,7 +339,21 @@ app.post('/set_appointment', (req, res) => {
     });
 });
 
-// TODO Update appoinment
+// Update Appoinment By App Num
+app.put('/update_appointment/:app_num', (req, res) => {
+    const { first_name, last_name, nic, address, age, gender, contact_num, email, p_type, cd_id } = req.body;
+    const appointmentId = req.params.app_num;
+    const sql = 'UPDATE appointment SET first_name=?, last_name=?, nic=?, address=?, age=?, gender=?, contact_num=?, email=?, p_type=?, cd_id=? WHERE app_num=?';
+    db.query(sql, [first_name, last_name, nic, address, age, gender, contact_num, email, p_type, cd_id, appointmentId], (err, result) => {
+        if (err) {
+            console.error('Error executing query: ', err);
+            res.status(500).json({ error: 'Internal server error.' + err });
+            return;
+        }
+        res.json({ message: 'Appointment updated successfully.' });
+    });
+});
+
 
 //Get Notification
 app.get('/get_notification', (req, res) => {
