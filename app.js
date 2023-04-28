@@ -389,9 +389,9 @@ app.get('/get_stock/:prdct_id', (req, res) => {
 
 //Set Stock
 app.post('/set_stock', (req, res) => {
-    const { brand_name, prdct_name, description, mfg_date, exp_date, ac_price, sell_price, total_quantity, med_type, total_quantity_ac_price, total_quantity_sell_price } = req.body;
-    const sql = 'INSERT INTO stock (brand_name, prdct_name, description, mfg_date, exp_date, ac_price, sell_price, total_quantity, med_type, total_quantity_ac_price, total_quantity_sell_price) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
-    db.query(sql, [brand_name, prdct_name, description, mfg_date, exp_date, ac_price, sell_price, total_quantity, med_type, total_quantity_ac_price, total_quantity_sell_price], (err, result) => {
+    const { brand_name, prdct_name, description, mfd_date, exp_date, ac_price, sell_price, total_quantity, med_type, total_quantity_ac_price, total_quantity_sell_price } = req.body;
+    const sql = 'INSERT INTO stock (brand_name, prdct_name, description, mfd_date, exp_date, ac_price, sell_price, total_quantity, med_type, total_quantity_ac_price, total_quantity_sell_price) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+    db.query(sql, [brand_name, prdct_name, description, mfd_date, exp_date, ac_price, sell_price, total_quantity, med_type, total_quantity_ac_price, total_quantity_sell_price], (err, result) => {
         if (err) {
             console.error('Error executing query: ', err);
             res.status(500).json({ error: 'Internal server error.' + err });
