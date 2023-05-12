@@ -87,7 +87,7 @@ app.post(endpoints["Set Doctors"], (req, res) => {
 });
 
 //Get Patients
-app.get('/get_patients', (req, res) => {
+app.get(endpoints["Get Patients"], (req, res) => {
     const sql = 'SELECT * FROM patient';
     db.query(sql, (err, result) => {
         if (err) {
@@ -100,7 +100,7 @@ app.get('/get_patients', (req, res) => {
 });
 
 //Get Patients By NIC
-app.get('/get_patients/:nic', (req, res) => {
+app.get(endpoints["Get Patients By NIC"], (req, res) => {
     const nic = req.params.nic;
     const nicRegex = /^([0-9]{9}[x|X|v|V]|[0-9]{12})$/;
     if (!nicRegex.test(nic)) {
@@ -119,7 +119,7 @@ app.get('/get_patients/:nic', (req, res) => {
 });
 
 //Set Patients
-app.post('/set_patients', (req, res) => {
+app.post(endpoints["Set Patients"], (req, res) => {
     const { first_name, last_name, nic, age, p_type, gender, app_date, contact_no, address } = req.body;
     const sql = 'INSERT INTO patient (first_name, last_name, nic, age, p_type, gender, app_date, contact_no, address) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)';
     db.query(sql, [first_name, last_name, nic, age, p_type, gender, app_date, contact_no, address], (err, result) => {
@@ -133,7 +133,7 @@ app.post('/set_patients', (req, res) => {
 });
 
 //Get Profit
-app.get('/get_profit', (req, res) => {
+app.get(endpoints["Get Profit"], (req, res) => {
     const sql = 'SELECT * FROM profit';
     db.query(sql, (err, result) => {
         if (err) {
@@ -146,7 +146,7 @@ app.get('/get_profit', (req, res) => {
 });
 
 //Get Profit By Date
-app.get('/get_profit/:date', (req, res) => {
+app.get(endpoints["Get Profit By Date"], (req, res) => {
     const date = req.params.date;
     const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
     if (!dateRegex.test(date)) {
@@ -165,7 +165,7 @@ app.get('/get_profit/:date', (req, res) => {
 });
 
 //Get Weekly Profit
-app.get('/get_weekly_profit/:date', (req, res) => {
+app.get(endpoints["Get Weekly Profit"], (req, res) => {
     const date = req.params.date;
     const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
     if (!dateRegex.test(date)) {
