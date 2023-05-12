@@ -442,7 +442,7 @@ app.get(endpoints["Get Stock By Prod ID"], (req, res) => {
 });
 
 //Set Stock
-app.post('/set_stock', (req, res) => {
+app.post(endpoints["Set Stock"], (req, res) => {
     const { brand_name, prdct_name, description, mfd_date, exp_date, ac_price, sell_price, total_quantity, med_type, total_quantity_ac_price, total_quantity_sell_price } = req.body;
     const sql = 'INSERT INTO stock (brand_name, prdct_name, description, mfd_date, exp_date, ac_price, sell_price, total_quantity, med_type, total_quantity_ac_price, total_quantity_sell_price) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
     db.query(sql, [brand_name, prdct_name, description, mfd_date, exp_date, ac_price, sell_price, total_quantity, med_type, total_quantity_ac_price, total_quantity_sell_price], (err, result) => {
@@ -455,8 +455,8 @@ app.post('/set_stock', (req, res) => {
     });
 });
 
-//DELETS Stock By Prod ID
-app.get('/delete_stock/:prdct_id', (req, res) => {
+//Delete Stock By Prod ID
+app.get(endpoints["Delete Stock By Prod ID"], (req, res) => {
     const prdct_id = req.params.prdct_id;
     const prdct_idRegex = /^(?:[1-9]|[1-9]\d{1,2}|999)$/;
     if (!prdct_idRegex.test(prdct_id)) {
@@ -475,7 +475,7 @@ app.get('/delete_stock/:prdct_id', (req, res) => {
 });
 
 //Get Patient History
-app.get('/get_patient_history', (req, res) => {
+app.get(endpoints["Get Patient History"], (req, res) => {
     const sql = 'SELECT * FROM patient_history';
     db.query(sql, (err, result) => {
         if (err) {
@@ -488,7 +488,7 @@ app.get('/get_patient_history', (req, res) => {
 });
 
 //Set Patient History
-app.post('/set_patient_history', (req, res) => {
+app.post(endpoints["Set Patient History"], (req, res) => {
     const { nic, first_name, last_name, app_doctor, app_type, app_date, app_time } = req.body;
     const sql = 'INSERT INTO stock (nic, first_name, last_name, app_doctor, app_type, app_date, app_time) VALUES (?, ?, ?, ?, ?, ?, ?)';
     db.query(sql, [nic, first_name, last_name, app_doctor, app_type, app_date, app_time], (err, result) => {
@@ -502,7 +502,7 @@ app.post('/set_patient_history', (req, res) => {
 });
 
 //Get Expire
-app.get('/get_expire', (req, res) => {
+app.get(endpoints["Get Expire"], (req, res) => {
     const sql = 'SELECT * FROM expire';
     db.query(sql, (err, result) => {
         if (err) {
@@ -515,7 +515,7 @@ app.get('/get_expire', (req, res) => {
 });
 
 //Get Expire By Expire Type
-app.get('/get_expire/:expire_type', (req, res) => {
+app.get(endpoints["Get Expire By Expire Type"], (req, res) => {
     const _type = req.params.expire_type;
     const _typeRegex = /^[1-9]$/;
     if (!_typeRegex.test(_type)) {
@@ -534,7 +534,7 @@ app.get('/get_expire/:expire_type', (req, res) => {
 });
 
 //Get Stock Low By Stock Type
-app.get('/get_stock_low/:stock_type', (req, res) => {
+app.get(endpoints["Get Stock Low By Stock Type"], (req, res) => {
     const stock_type = req.params.stock_type;
     const stock_typeRegex = /^[1-9]$/;
     if (!stock_typeRegex.test(stock_type)) {
@@ -552,8 +552,8 @@ app.get('/get_stock_low/:stock_type', (req, res) => {
     });
 });
 
-//SET Ping
-app.post('/set_ping', (req, res) => {
+//Set Ping
+app.post(endpoints["Set Ping"], (req, res) => {
     const { data } = req.body;
     const sql = 'INSERT INTO ping (data) VALUES (?)';
     db.query(sql, [data], (err, result) => {
@@ -566,8 +566,8 @@ app.post('/set_ping', (req, res) => {
     });
 });
 
-//GET STOCK TYPES
-app.get('/get_stock_types', (req, res) => {
+//Get Stock Types
+app.get(endpoints["Get Stock Types"], (req, res) => {
     const sql = 'SELECT DISTINCT med_type FROM stock;';
     db.query(sql, (err, result) => {
         if (err) {
