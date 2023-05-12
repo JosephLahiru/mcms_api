@@ -59,6 +59,11 @@ app.get(endpoints["Root"], (req, res) => {
     res.send('Hi!, I am Online!!!');
 });
 
+//Get Endpoints
+app.get('/get_endpoints', (req, res) => {
+    res.send(endpoints);
+});
+
 //Get Doctors
 app.get(endpoints["Get Doctors"], (req, res) => {
     const sql = 'SELECT * FROM doctor';
