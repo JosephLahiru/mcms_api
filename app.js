@@ -11,7 +11,7 @@ const corsOptions = {
     allowedHeaders: 'Content-Type,Authorization',
 };
 
-endpoints= {
+const endpoints = {
     "Root": '/', 
     "Get Doctors": '/get_doctors', 
     "Get Channelling Doctors": '/get_channelling_doctors',
