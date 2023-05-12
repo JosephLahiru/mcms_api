@@ -559,7 +559,7 @@ app.post('/set_ping', (req, res) => {
 });
 
 //GET STOCK TYPES
-app.get('/get_stok_types', (req, res) => {
+app.get('/get_stock_types', (req, res) => {
     const sql = 'SELECT DISTINCT med_type FROM stock;';
     db.query(sql, (err, result) => {
         if (err) {
