@@ -11,16 +11,24 @@ const corsOptions = {
     allowedHeaders: 'Content-Type,Authorization',
 };
 
+endpoints= {"Root": '/', 
+            "Get Doctors": '/get_doctors', 
+            "Get Channelling Doctors": '/get_channelling_doctors',
+            "Get Doctors By ID": '/get_doctors/:d_id',
+            "Set Doctors": '/set_doctors',
+
+        }
+
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cors(corsOptions));
 
-app.get('/', (req, res) => {
+app.get(endpoints["Root"], (req, res) => {
     res.send('Hi!, I am Online!!!');
 });
 
 //Get Doctors
-app.get('/get_doctors', (req, res) => {
+app.get(endpoints["Get Doctors"], (req, res) => {
     const sql = 'SELECT * FROM doctor';
     db.query(sql, (err, result) => {
         if (err) {
@@ -33,7 +41,7 @@ app.get('/get_doctors', (req, res) => {
 });
 
 //Get Channeling Doctors
-app.get('/get_channelling_doctors', (req, res) => {
+app.get(endpoints["Get Channelling Doctors"], (req, res) => {
     const sql = 'SELECT * FROM channelling_doctor';
     db.query(sql, (err, result) => {
         if (err) {
@@ -46,7 +54,7 @@ app.get('/get_channelling_doctors', (req, res) => {
 });
 
 //Get Doctors By ID
-app.get('/get_doctors/:d_id', (req, res) => {
+app.get(endpoints["Get Doctors By ID"], (req, res) => {
     const d_id = req.params.d_id;
     const d_idRegex = /^D\d{3}$/;
     if (!d_idRegex.test(d_id)) {
@@ -65,7 +73,7 @@ app.get('/get_doctors/:d_id', (req, res) => {
 });
 
 //Set Doctors
-app.post('/set_doctors', (req, res) => {
+app.post(endpoints["Set Doctors"], (req, res) => {
     const { d_id, first_name, last_name, nic, email, address, contact_no } = req.body;
     const sql = 'INSERT INTO doctor (d_id, first_name, last_name, nic, email, address, contact_no) VALUES (?, ?, ?, ?, ?, ?, ?)';
     db.query(sql, [d_id, first_name, last_name, nic, email, address, contact_no], (err, result) => {
