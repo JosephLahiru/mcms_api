@@ -558,6 +558,19 @@ app.post('/set_ping', (req, res) => {
     });
 });
 
+//GET STOCK TYPES
+app.get('/get_stok_types', (req, res) => {
+    const sql = 'SELECT DISTINCT med_type FROM stock;';
+    db.query(sql, (err, result) => {
+        if (err) {
+            console.error('Error executing query: ', err);
+            res.status(500).json({ error: 'Internal server error.' + err });
+            return;
+        }
+        res.json(result);
+    });
+});
+
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
     console.log(`Server listening on port ${port}.`);
