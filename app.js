@@ -11,13 +11,44 @@ const corsOptions = {
     allowedHeaders: 'Content-Type,Authorization',
 };
 
-endpoints= {"Root": '/', 
-            "Get Doctors": '/get_doctors', 
-            "Get Channelling Doctors": '/get_channelling_doctors',
-            "Get Doctors By ID": '/get_doctors/:d_id',
-            "Set Doctors": '/set_doctors',
-
-        }
+endpoints= {
+    "Root": '/', 
+    "Get Doctors": '/get_doctors', 
+    "Get Channelling Doctors": '/get_channelling_doctors',
+    "Get Doctors By ID": '/get_doctors/:d_id',
+    "Set Doctors": '/set_doctors',
+    "Get Patients": '/get_patients',
+    "Get Patients By NIC": '/get_patients/:nic',
+    "Set Patients": '/set_patients',
+    "Get Profit": '/get_profit',
+    "Get Profit By Date": '/get_profit/:date',
+    "Get Weekly Profit": '/get_weekly_profit/:date',
+    "Get Monthly Profit": '/get_monthly_profit/:date',
+    "Set Profit": '/set_profit',
+    "Get Attendance": '/get_attendance',
+    "Get Attendance By ID": '/get_attendance/:assit_id',
+    "Get Attendance By Date": '/get_attendance/:date',
+    "Get Attendance By ID and Date": '/get_attendance/:assit_id/:date',
+    "Set Attendance": '/set_attendance',
+    "Get Appointment": '/get_appointment',
+    "Get Appointment By NIC": '/get_appointment_nic/:nic',
+    "Get Appointment By App Num": '/get_appointment/:app_num',
+    "Set Appointment": '/set_appointment',
+    "Update Appoinment By App Num": '/update_appointment/:app_num',
+    "Get Notification": '/get_notification',
+    "Set Notification": '/set_notification',
+    "Get Stock": '/get_stock',
+    "Get Stock By Prod ID": '/get_stock/:prdct_id',
+    "Set Stock": '/set_stock',
+    "Delete Stock By Prod ID": '/delete_stock/:prdct_id',
+    "Get Patient History": '/get_patient_history',
+    "Set Patient History": '/set_patient_history',
+    "Get Expire": '/get_expire',
+    "Get Expire By Expire Type": '/get_expire/:expire_type',
+    "Get Stock Low By Stock Type": '/get_stock_low/:stock_type',
+    "Set Ping": '/set_ping',
+    "Get Stock Types": '/get_stock_types'
+}
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
