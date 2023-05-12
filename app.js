@@ -54,6 +54,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cors(corsOptions));
 
+//Online Test
 app.get(endpoints["Root"], (req, res) => {
     res.send('Hi!, I am Online!!!');
 });
