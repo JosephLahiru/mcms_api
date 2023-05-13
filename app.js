@@ -467,7 +467,7 @@ app.get(endpoints["Get Stock By Prod ID"], (req, res) => {
         res.status(400).json({ error: 'Invalid Product ID format.' });
         return;
     }
-    const sql = 'SELECT * FROM stock WHERE prdct_id = ?';
+    const sql = 'SELECT * FROM stock WHERE prdct_id = ? AND deleted = 0';
     db.query(sql, [prdct_id], (err, result) => {
         if (err) {
             console.error('Error executing query: ', err);
