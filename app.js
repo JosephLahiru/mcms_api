@@ -448,7 +448,7 @@ app.post(endpoints["Set Notification"], (req, res) => {
 
 //Get Stock
 app.get(endpoints["Get Stock"], (req, res) => {
-    const sql = 'SELECT * FROM stock';
+    const sql = 'SELECT * FROM stock WHERE deleted = 0';
     db.query(sql, (err, result) => {
         if (err) {
             console.error('Error executing query: ', err);
