@@ -46,6 +46,7 @@ const endpoints = {
     "Get Expire": '/get_expire',
     "Get Expire By Expire Type": '/get_expire/:expire_type',
     "Get Stock Low By Stock Type": '/get_stock_low/:stock_type',
+    "Get Stock Low": '/get_stock_low',
     "Set Ping": '/set_ping',
     "Get Stock Types": '/get_stock_types'
 }
@@ -418,7 +419,6 @@ app.put(endpoints["Update Appoinment By App Num"], (req, res) => {
     });
 });
 
-
 //Get Notification
 app.get(endpoints["Get Notification"], (req, res) => {
     const sql = 'SELECT * FROM notification';
@@ -580,6 +580,19 @@ app.get(endpoints["Get Stock Low By Stock Type"], (req, res) => {
     }
     const sql = 'SELECT * FROM stock_low WHERE stock_type = ?';
     db.query(sql, [stock_type], (err, result) => {
+        if (err) {
+            console.error('Error executing query: ', err);
+            res.status(500).json({ error: 'Internal server error.' + err });
+            return;
+        }
+        res.json(result);
+    });
+});
+
+//Get Stock Low
+app.get(endpoints["Get Stock Low"], (req, res) => {
+    const sql = 'SELECT * FROM stock_low';
+    db.query(sql, (err, result) => {
         if (err) {
             console.error('Error executing query: ', err);
             res.status(500).json({ error: 'Internal server error.' + err });
