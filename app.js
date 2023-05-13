@@ -500,7 +500,7 @@ app.get(endpoints["Delete Stock By Prod ID"], (req, res) => {
         res.status(400).json({ error: 'Invalid Product ID format.' });
         return;
     }
-    const sql = 'DELETE FROM stock WHERE prdct_id = ?';
+    const sql = 'UPDATE stock SET deleted = 1 WHERE prdct_id = ?';
     db.query(sql, [prdct_id], (err, result) => {
         if (err) {
             console.error('Error executing query: ', err);
