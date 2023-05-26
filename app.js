@@ -342,7 +342,7 @@ app.post(endpoints["Set Attendance"], (req, res) => {
 
 //Get Appointment
 app.get(endpoints["Get Appointment"], (req, res) => {
-    const sql = 'SELECT * FROM appointment';
+    const sql = 'SELECT * FROM appointment WHERE deleted = 0';
     db.query(sql, (err, result) => {
         if (err) {
             console.error('Error executing query: ', err);
@@ -357,7 +357,7 @@ app.get(endpoints["Get Appointment"], (req, res) => {
 app.get(endpoints["Delete Appointment By Appo ID"], (req, res) => {
     const appo_id = req.params.appo_id;
     const appo_idRegex = /^(?:[1-9]|[1-9]\d{1,2}|999)$/;
-    if (!appo_idRegex.test(prdct_id)) {
+    if (!appo_idRegex.test(appo_id)) {
         res.status(400).json({ error: 'Invalid Appointment ID format.' });
         return;
     }
@@ -380,7 +380,7 @@ app.get(endpoints["Get Appointment By NIC"], (req, res) => {
         res.status(400).json({ error: 'Invalid NIC format.' });
         return;
     }
-    const sql = 'SELECT * FROM appointment WHERE nic = ?';
+    const sql = 'SELECT * FROM appointment WHERE nic = ? AND deleted = 0';
     db.query(sql, [nic], (err, result) => {
         if (err) {
             console.error('Error executing query: ', err);
@@ -399,7 +399,7 @@ app.get(endpoints["Get Appointment By App Num"], (req, res) => {
         res.status(400).json({ error: 'Invalid Appoinment Number format.' });
         return;
     }
-    const sql = 'SELECT * FROM appointment WHERE app_num = ?';
+    const sql = 'SELECT * FROM appointment WHERE app_num = ? AND deleted = 0';
     db.query(sql, [app_num], (err, result) => {
         if (err) {
             console.error('Error executing query: ', err);
