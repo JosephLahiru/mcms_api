@@ -357,7 +357,7 @@ app.get(endpoints["Get Appointment"], (req, res) => {
 app.get(endpoints["Delete Appointment By Appo ID"], (req, res) => {
     const appo_id = req.params.appo_id;
     const appo_idRegex = /^(?:[1-9]|[1-9]\d{1,2}|999)$/;
-    if (!appo_idRegex.test(prdct_id)) {
+    if (!appo_idRegex.test(appo_id)) {
         res.status(400).json({ error: 'Invalid Appointment ID format.' });
         return;
     }
