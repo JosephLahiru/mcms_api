@@ -31,7 +31,7 @@ const endpoints = {
     "Get Attendance By ID and Date": '/get_attendance/:assit_id/:date',
     "Set Attendance": '/set_attendance',
     "Get Appointment": '/get_appointment',
-    "Delete Appointment By Appo ID": '/delete_appoinment/:appo_id',
+    "Delete Appointment By Appo ID": '/delete_appointment/:appo_id',
     "Get Appointment By NIC": '/get_appointment_nic/:nic',
     "Get Appointment By App Num": '/get_appointment/:app_num',
     "Set Appointment": '/set_appointment',
