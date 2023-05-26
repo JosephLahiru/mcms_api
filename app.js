@@ -31,6 +31,7 @@ const endpoints = {
     "Get Attendance By ID and Date": '/get_attendance/:assit_id/:date',
     "Set Attendance": '/set_attendance',
     "Get Appointment": '/get_appointment',
+    "Delete Appointment By Appo ID": '/delete_appoinment/:appo_id',
     "Get Appointment By NIC": '/get_appointment_nic/:nic',
     "Get Appointment By App Num": '/get_appointment/:app_num',
     "Set Appointment": '/set_appointment',
@@ -343,6 +344,25 @@ app.post(endpoints["Set Attendance"], (req, res) => {
 app.get(endpoints["Get Appointment"], (req, res) => {
     const sql = 'SELECT * FROM appointment';
     db.query(sql, (err, result) => {
+        if (err) {
+            console.error('Error executing query: ', err);
+            res.status(500).json({ error: 'Internal server error.' + err });
+            return;
+        }
+        res.json(result);
+    });
+});
+
+//Delete Appointment By Appo ID
+app.get(endpoints["Delete Appointment By Appo ID"], (req, res) => {
+    const appo_id = req.params.appo_id;
+    const appo_idRegex = /^(?:[1-9]|[1-9]\d{1,2}|999)$/;
+    if (!appo_idRegex.test(prdct_id)) {
+        res.status(400).json({ error: 'Invalid Appointment ID format.' });
+        return;
+    }
+    const sql = 'UPDATE appointment SET deleted = 1 WHERE app_num = ?';
+    db.query(sql, [appo_id], (err, result) => {
         if (err) {
             console.error('Error executing query: ', err);
             res.status(500).json({ error: 'Internal server error.' + err });
