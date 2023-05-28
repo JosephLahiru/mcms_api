@@ -49,7 +49,8 @@ const endpoints = {
     "Get Stock Low By Stock Type": '/get_stock_low/:stock_type',
     "Get Stock Low": '/get_stock_low',
     "Set Ping": '/set_ping',
-    "Get Stock Types": '/get_stock_types'
+    "Get Stock Types": '/get_stock_types',
+    "Get Appointment ID By Appointment Name": '/get_app_id/:at_name'
 }
 
 app.use(bodyParser.urlencoded({ extended: true }));
