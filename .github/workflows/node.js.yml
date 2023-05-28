@@ -27,6 +27,7 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
     - run: npm ci
+    - run: sudo su
     - name: Check if PM2 process exists
       id: check-pm2
       run: |
@@ -38,3 +39,4 @@ jobs:
           pm2 delete 0
         fi
     - run: pm2 start app.js --name "api" --no-daemon&
+    - run: exit
