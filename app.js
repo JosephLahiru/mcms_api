@@ -650,23 +650,23 @@ app.get(endpoints["Get Stock Types"], (req, res) => {
     });
 });
 
-//Get Appointment ID By Appointment Name
-app.get(endpoints["Get Appointment ID By Appointment Name"], (req, res) => {
-    const app_name = req.params.at_name;
-    if (!app_name === '') {
-        res.status(400).json({ error: 'Appointment Name cannot be empty.' });
-        return;
-    }
-    const sql = 'SELECT at_id FROM appointment_type WHERE at_name = ?;';
-    db.query(sql, [app_name], (err, result) => {
-        if (err) {
-            console.error('Error executing query: ', err);
-            res.status(500).json({ error: 'Internal server error.' + err });
-            return;
-        }
-        res.json(result);
-    });
-});
+// //Get Appointment ID By Appointment Name
+// app.get(endpoints["Get Appointment ID By Appointment Name"], (req, res) => {
+//     const app_name = req.params.at_name;
+//     if (!app_name === '') {
+//         res.status(400).json({ error: 'Appointment Name cannot be empty.' });
+//         return;
+//     }
+//     const sql = 'SELECT at_id FROM appointment_type WHERE at_name = ?;';
+//     db.query(sql, [app_name], (err, result) => {
+//         if (err) {
+//             console.error('Error executing query: ', err);
+//             res.status(500).json({ error: 'Internal server error.' + err });
+//             return;
+//         }
+//         res.json(result);
+//     });
+// });
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
