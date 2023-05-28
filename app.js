@@ -50,7 +50,8 @@ const endpoints = {
     "Get Stock Low": '/get_stock_low',
     "Set Ping": '/set_ping',
     "Get Stock Types": '/get_stock_types',
-    "Get Appointment ID By Appointment Name": '/get_app_id/:at_name'
+    "Get Appointment ID By Appointment Name": '/get_app_id/:at_name',
+    "Get Channelling Doctor ID By Doctor Type": '/get_cd_id/:d_type'
 }
 
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -659,6 +660,24 @@ app.get(endpoints["Get Appointment ID By Appointment Name"], (req, res) => {
     }
     const sql = 'SELECT at_id FROM appointment_type WHERE at_name = ?;';
     db.query(sql, [app_name], (err, result) => {
+        if (err) {
+            console.error('Error executing query: ', err);
+            res.status(500).json({ error: 'Internal server error.' + err });
+            return;
+        }
+        res.json(result);
+    });
+});
+
+//Get Channelling Doctor ID By Doctor Type
+app.get(endpoints["Get Channelling Doctor ID By Doctor Type"], (req, res) => {
+    const d_type = req.params.d_type;
+    if (!d_type === '') {
+        res.status(400).json({ error: 'Doctor Type cannot be empty.' });
+        return;
+    }
+    const sql = 'SELECT cd_id FROM channelling_doctor WHERE d_type = ?;';
+    db.query(sql, [d_type], (err, result) => {
         if (err) {
             console.error('Error executing query: ', err);
             res.status(500).json({ error: 'Internal server error.' + err });
