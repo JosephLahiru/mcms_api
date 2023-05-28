@@ -51,7 +51,8 @@ const endpoints = {
     "Set Ping": '/set_ping',
     "Get Stock Types": '/get_stock_types',
     "Get Appointment ID By Appointment Name": '/get_app_id/:at_name',
-    "Get Channelling Doctor ID By Doctor Type": '/get_cd_id/:d_type'
+    "Get Channelling Doctor ID By Doctor Type": '/get_cd_id/:d_type',
+    "Get ATM ID By ATM Type": '/get_atm_id/:atm_type'
 }
 
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -678,6 +679,24 @@ app.get(endpoints["Get Channelling Doctor ID By Doctor Type"], (req, res) => {
     }
     const sql = 'SELECT cd_id FROM channelling_doctor WHERE d_type = ?;';
     db.query(sql, [d_type], (err, result) => {
+        if (err) {
+            console.error('Error executing query: ', err);
+            res.status(500).json({ error: 'Internal server error.' + err });
+            return;
+        }
+        res.json(result);
+    });
+});
+
+//Get ATM ID By ATM Type
+app.get(endpoints["Get ATM ID By ATM Type"], (req, res) => {
+    const atm_type = req.params.atm_type;
+    if (!atm_type === '') {
+        res.status(400).json({ error: 'ATM Type cannot be empty.' });
+        return;
+    }
+    const sql = 'SELECT atm_id FROM appointment_time WHERE atm_type = ?;';
+    db.query(sql, [atm_type], (err, result) => {
         if (err) {
             console.error('Error executing query: ', err);
             res.status(500).json({ error: 'Internal server error.' + err });
