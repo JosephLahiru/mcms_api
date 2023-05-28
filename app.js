@@ -651,7 +651,7 @@ app.get(endpoints["Get Stock Types"], (req, res) => {
 });
 
 //Get Appointment ID By Appointment Name
-app.get(endpoints["Get Appointment ID By Type"], (req, res) => {
+app.get(endpoints["Get Appointment ID By Appointment Name"], (req, res) => {
     const app_name = req.params.at_name;
     if (!app_name === '') {
         res.status(400).json({ error: 'Appointment Name cannot be empty.' });
