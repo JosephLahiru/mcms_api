@@ -28,4 +28,4 @@ jobs:
         cache: 'npm'
     - run: npm i
 #     - run: pm2 delete 0
-    - run: pm2 start app.js --no-daemon
+    - run: (pm2 start app.js --no-daemon&)
