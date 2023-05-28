@@ -345,7 +345,7 @@ app.post(endpoints["Set Attendance"], (req, res) => {
 
 //Get Appointment
 app.get(endpoints["Get Appointment"], (req, res) => {
-    const sql = 'SELECT a.app_num, a.first_name, a.last_name,  a.address, a.age, a.gender, a.nic, a.email, a.contact_num, a.atm_type, atp.at_name FROM (SELECT appointment.*, appointment_time.atm_type FROM appointment INNER JOIN appointment_time ON appointment.atm_id = appointment_time.atm_id) as a INNER JOIN appointment_type as atp ON a.at_id = atp.at_id WHERE a.deleted = 0;';
+    const sql = 'SELECT a.app_num, a.first_name, a.last_name,  a.address, a.age, a.gender, a.nic, a.email, a.contact_num, a.atm_type, atp.at_name, a.cd_id FROM (SELECT appointment.*, appointment_time.atm_type FROM appointment INNER JOIN appointment_time ON appointment.atm_id = appointment_time.atm_id) as a INNER JOIN appointment_type as atp ON a.at_id = atp.at_id WHERE a.deleted = 0;';
     db.query(sql, (err, result) => {
         if (err) {
             console.error('Error executing query: ', err);
@@ -383,7 +383,7 @@ app.get(endpoints["Get Appointment By NIC"], (req, res) => {
         res.status(400).json({ error: 'Invalid NIC format.' });
         return;
     }
-    const sql = 'SELECT a.app_num, a.first_name, a.last_name,  a.address, a.age, a.gender, a.nic, a.email, a.contact_num, a.atm_type, atp.at_name FROM (SELECT appointment.*, appointment_time.atm_type FROM appointment INNER JOIN appointment_time ON appointment.atm_id = appointment_time.atm_id) as a INNER JOIN appointment_type as atp ON a.at_id = atp.at_id WHERE a.deleted = 0 AND nic = ?';
+    const sql = 'SELECT a.app_num, a.first_name, a.last_name,  a.address, a.age, a.gender, a.nic, a.email, a.contact_num, a.atm_type, atp.at_name, a.cd_id FROM (SELECT appointment.*, appointment_time.atm_type FROM appointment INNER JOIN appointment_time ON appointment.atm_id = appointment_time.atm_id) as a INNER JOIN appointment_type as atp ON a.at_id = atp.at_id WHERE a.deleted = 0 AND nic = ?';
     db.query(sql, [nic], (err, result) => {
         if (err) {
             console.error('Error executing query: ', err);
