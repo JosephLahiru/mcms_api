@@ -30,12 +30,11 @@ jobs:
     - name: Check if PM2 process exists
       id: check-pm2
       run: |
-        pm2 describe 0
+        pm2 describe 0 || true
         echo "::set-output name=exists::${{ steps.check-pm2.outputs.exitcode == 0 }}"
     - name: Delete PM2 process 0
       run: |
         if [ "${{ steps.check-pm2.outputs.exists }}" == "true" ]; then
           pm2 delete 0
         fi
-    - name: Start Server
-      run: (pm2 start app.js --no-daemon&)
+    - run: pm2 start app.js --no-daemon || true
