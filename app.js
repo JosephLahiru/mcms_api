@@ -402,7 +402,7 @@ app.get(endpoints["Get Appointment By App Num"], (req, res) => {
         res.status(400).json({ error: 'Invalid Appoinment Number format.' });
         return;
     }
-    const sql = 'SELECT a.app_num, a.first_name, a.last_name,  a.address, a.age, a.gender, a.nic, a.email, a.contact_num, a.atm_type, atp.at_name FROM (SELECT appointment.*, appointment_time.atm_type FROM appointment INNER JOIN appointment_time ON appointment.atm_id = appointment_time.atm_id) as a INNER JOIN appointment_type as atp ON a.at_id = atp.at_id WHERE a.deleted = 0 AND app_num = ?';
+    const sql = 'SELECT a.app_num, a.first_name, a.last_name,  a.address, a.age, a.gender, a.nic, a.email, a.contact_num, a.atm_type, atp.at_name, a.cd_id FROM (SELECT appointment.*, appointment_time.atm_type FROM appointment INNER JOIN appointment_time ON appointment.atm_id = appointment_time.atm_id) as a INNER JOIN appointment_type as atp ON a.at_id = atp.at_id WHERE a.deleted = 0 AND app_num = ?';
     db.query(sql, [app_num], (err, result) => {
         if (err) {
             console.error('Error executing query: ', err);
