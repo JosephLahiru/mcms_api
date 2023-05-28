@@ -27,5 +27,14 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
     - run: npm i
-    - run: pm2 delete 0
-    - run: (pm2 start app.js --no-daemon&)
+    - name: Check if PM2 process exists
+      id: check-pm2
+      run: |
+        pm2 describe 0
+        echo "::set-output name=exists::${{ steps.check-pm2.outputs.exitcode == 0 }}"
+    - name: Delete PM2 process 0
+      run: |
+        if [ "${{ steps.check-pm2.outputs.exists }}" == "true" ]; then
+          pm2 delete 0
+        fi
+    - run: pm2 start app.js --no-daemon
