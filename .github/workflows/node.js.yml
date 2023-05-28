@@ -27,7 +27,6 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
     - run: npm ci
-    - run: sudo su
     - name: Check if PM2 process exists
       id: check-pm2
       run: |
@@ -38,5 +37,5 @@ jobs:
         if [ "${{ steps.check-pm2.outputs.exists }}" == "true" ]; then
           pm2 delete 0
         fi
-    - run: pm2 start app.js --name "api" &
-    - run: exit
+    - run: pm2 start app.js --name "api" --no-daemon &
+    - run: pm2 logs
