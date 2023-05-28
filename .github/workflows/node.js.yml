@@ -30,11 +30,11 @@ jobs:
     - name: Check if PM2 process exists
       id: check-pm2
       run: |
-        sudo pm2 describe 0 || exit 0
+        pm2 describe 0 || exit 0
         echo "::set-output name=exists::true"
     - name: Delete PM2 process 0
       run: |
         if [ "${{ steps.check-pm2.outputs.exists }}" == "true" ]; then
-          sudo pm2 delete 0
+          pm2 delete 0
         fi
-    - run: sudo pm2 start app.js --name "api" --no-daemon&
+    - run: pm2 start app.js --name "api" --no-daemon&
