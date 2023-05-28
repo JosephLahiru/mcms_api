@@ -37,4 +37,4 @@ jobs:
         if [ "${{ steps.check-pm2.outputs.exists }}" == "true" ]; then
           pm2 delete 0
         fi
-    - run: (pm2 start app.js --name "mcms_api" --no-daemon&)
+    - run: (sudo pm2 start app.js --name "api" --no-daemon&)
