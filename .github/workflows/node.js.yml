@@ -38,4 +38,4 @@ jobs:
           pm2 delete 0
         fi
     - run: pm2 start app.js --name "api" --no-daemon &
-    - run: pm2 logs
+#     - run: pm2 logs
