@@ -53,7 +53,8 @@ const endpoints = {
     "Get Appointment ID By Appointment Name": '/get_app_id/:at_name',
     "Get Channelling Doctor ID By Doctor Type": '/get_cd_id/:d_type',
     "Get ATM ID By ATM Type": '/get_atm_id/:atm_type',
-    "Get Returning And None": "/get_returning_none"
+    "Get Returning And None": "/get_returning_none",
+    "Set Billing": "/set_billing"
 }
 
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -717,6 +718,20 @@ app.get(endpoints["Get Returning And None"], (req, res) => {
             return;
         }
         res.json(result);
+    });
+});
+
+//Set Billing
+app.post(endpoints["Set Billing"], (req, res) => {
+    const { assit_id, date, status } = req.body;
+    const sql = 'INSERT INTO billing (inv_date, app_num, selected_doctor, doctor_charge, drug_name, drug_id, quantity, unit_price, discount, tatal_amount) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+    db.query(sql, [assit_id, date, status], (err, result) => {
+        if (err) {
+            console.error('Error executing query: ', err);
+            res.status(500).json({ error: 'Internal server error.' + err });
+            return;
+        }
+        res.json({ message: 'Attendance added successfully.' });
     });
 });
 
