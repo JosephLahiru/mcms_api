@@ -723,9 +723,9 @@ app.get(endpoints["Get Returning And None"], (req, res) => {
 
 //Set Billing
 app.post(endpoints["Set Billing"], (req, res) => {
-    const { assit_id, date, status } = req.body;
+    const { inv_date, app_num, selected_doctor, doctor_charge, drug_name, drug_id, quantity, unit_price, discount, total_amount } = req.body;
     const sql = 'INSERT INTO billing (inv_date, app_num, selected_doctor, doctor_charge, drug_name, drug_id, quantity, unit_price, discount, total_amount) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
-    db.query(sql, [assit_id, date, status], (err, result) => {
+    db.query(sql, [inv_date, app_num, selected_doctor, doctor_charge, drug_name, drug_id, quantity, unit_price, discount, total_amount], (err, result) => {
         if (err) {
             console.error('Error executing query: ', err);
             res.status(500).json({ error: 'Internal server error.' + err });
