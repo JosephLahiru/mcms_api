@@ -366,7 +366,7 @@ app.get(endpoints["Delete Appointment By Appo ID"], (req, res) => {
         res.status(400).json({ error: 'Invalid Appointment ID format.' });
         return;
     }
-    const sql = 'UPDATE appointment SET deleted = 1 WHERE app_num = ?';
+    const sql = 'UPDATE appointment SET deleted = 1 WHERE app_id = ?';
     db.query(sql, [appo_id], (err, result) => {
         if (err) {
             console.error('Error executing query: ', err);
