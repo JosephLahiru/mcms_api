@@ -49,10 +49,12 @@ const endpoints = {
     "Get Stock Low By Stock Type": '/get_stock_low/:stock_type',
     "Get Stock Low": '/get_stock_low',
     "Set Ping": '/set_ping',
-    "Get Stock Types": '/get_stock_types',
+    "Get Med Types": '/get_med_types',
     "Get Appointment ID By Appointment Name": '/get_app_id/:at_name',
     "Get Channelling Doctor ID By Doctor Type": '/get_cd_id/:d_type',
     "Get ATM ID By ATM Type": '/get_atm_id/:atm_type',
+    "Get Stock Types": '/get_stock_types',
+    "Get Expire Types": '/get_expire_types',
     "Get Returning And None": "/get_returning_none",
     "Set Billing": "/set_billing"
 }
@@ -641,8 +643,8 @@ app.post(endpoints["Set Ping"], (req, res) => {
     });
 });
 
-//Get Stock Types
-app.get(endpoints["Get Stock Types"], (req, res) => {
+//Get Med Types
+app.get(endpoints["Get Med Types"], (req, res) => {
     const sql = 'SELECT DISTINCT med_type FROM stock;';
     db.query(sql, (err, result) => {
         if (err) {
@@ -732,6 +734,32 @@ app.post(endpoints["Set Billing"], (req, res) => {
             return;
         }
         res.json({ message: 'Billing added successfully.' });
+    });
+});
+
+//Get Stock Types
+app.get(endpoints["Get Stock Types"], (req, res) => {
+    const sql = 'SELECT DISTINCT stock_type FROM stock_type;';
+    db.query(sql, (err, result) => {
+        if (err) {
+            console.error('Error executing query: ', err);
+            res.status(500).json({ error: 'Internal server error.' + err });
+            return;
+        }
+        res.json(result);
+    });
+});
+
+//Get Expire Types
+app.get(endpoints["Get Expire Types"], (req, res) => {
+    const sql = 'SELECT DISTINCT expire_type FROM expire_type;';
+    db.query(sql, (err, result) => {
+        if (err) {
+            console.error('Error executing query: ', err);
+            res.status(500).json({ error: 'Internal server error.' + err });
+            return;
+        }
+        res.json(result);
     });
 });
 
