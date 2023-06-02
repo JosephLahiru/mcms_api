@@ -721,6 +721,19 @@ app.get(endpoints["Get Stock Types"], (req, res) => {
     });
 });
 
+//Get Expire Types
+app.get(endpoints["Get Expire Types"], (req, res) => {
+    const sql = 'SELECT DISTINCT expire_type FROM expire_type;';
+    db.query(sql, (err, result) => {
+        if (err) {
+            console.error('Error executing query: ', err);
+            res.status(500).json({ error: 'Internal server error.' + err });
+            return;
+        }
+        res.json(result);
+    });
+});
+
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
     console.log(`Server listening on port ${port}.`);
