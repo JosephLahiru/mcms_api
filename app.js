@@ -54,7 +54,9 @@ const endpoints = {
     "Get Channelling Doctor ID By Doctor Type": '/get_cd_id/:d_type',
     "Get ATM ID By ATM Type": '/get_atm_id/:atm_type',
     "Get Stock Types": '/get_stock_types',
-    "Get Expire Types": '/get_expire_types'
+    "Get Expire Types": '/get_expire_types',
+    "Get Returning And None": "/get_returning_none",
+    "Set Billing": "/set_billing"
 }
 
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -347,7 +349,7 @@ app.post(endpoints["Set Attendance"], (req, res) => {
 
 //Get Appointment
 app.get(endpoints["Get Appointment"], (req, res) => {
-    const sql = 'SELECT a.app_num, a.first_name, a.last_name,  a.address, a.age, a.gender, a.nic, a.email, a.contact_num, a.atm_type, atp.at_name, a.cd_id FROM (SELECT appointment.*, appointment_time.atm_type FROM appointment INNER JOIN appointment_time ON appointment.atm_id = appointment_time.atm_id) as a INNER JOIN appointment_type as atp ON a.at_id = atp.at_id WHERE a.deleted = 0;';
+    const sql = 'SELECT a.app_id, a.app_num, a.first_name, a.last_name,  a.address, a.age, a.gender, a.nic, a.email, a.contact_num, a.atm_type, atp.at_name, a.cd_id FROM (SELECT appointment.*, appointment_time.atm_type FROM appointment INNER JOIN appointment_time ON appointment.atm_id = appointment_time.atm_id) as a INNER JOIN appointment_type as atp ON a.at_id = atp.at_id WHERE a.deleted = 0;';
     db.query(sql, (err, result) => {
         if (err) {
             console.error('Error executing query: ', err);
@@ -366,7 +368,7 @@ app.get(endpoints["Delete Appointment By Appo ID"], (req, res) => {
         res.status(400).json({ error: 'Invalid Appointment ID format.' });
         return;
     }
-    const sql = 'UPDATE appointment SET deleted = 1 WHERE app_num = ?';
+    const sql = 'UPDATE appointment SET deleted = 1 WHERE app_id = ?';
     db.query(sql, [appo_id], (err, result) => {
         if (err) {
             console.error('Error executing query: ', err);
@@ -505,9 +507,9 @@ app.get(endpoints["Get Stock By Prod ID"], (req, res) => {
 
 //Set Stock
 app.post(endpoints["Set Stock"], (req, res) => {
-    const { brand_name, prdct_name, description, mfd_date, exp_date, ac_price, sell_price, total_quantity, med_type, total_quantity_ac_price, total_quantity_sell_price } = req.body;
-    const sql = 'INSERT INTO stock (brand_name, prdct_name, description, mfd_date, exp_date, ac_price, sell_price, total_quantity, med_type, total_quantity_ac_price, total_quantity_sell_price) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
-    db.query(sql, [brand_name, prdct_name, description, mfd_date, exp_date, ac_price, sell_price, total_quantity, med_type, total_quantity_ac_price, total_quantity_sell_price], (err, result) => {
+    const { brand_name, prdct_name, description, mfd_date, exp_date, ac_price, sell_price, total_quantity, med_type, stock_type, expire_type } = req.body;
+    const sql = 'INSERT INTO stock (brand_name, prdct_name, description, mfd_date, exp_date, ac_price, sell_price, total_quantity, med_type, stock_type, expire_type ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+    db.query(sql, [brand_name, prdct_name, description, mfd_date, exp_date, ac_price, sell_price, total_quantity, med_type, stock_type, expire_type], (err, result) => {
         if (err) {
             console.error('Error executing query: ', err);
             res.status(500).json({ error: 'Internal server error.' + err });
@@ -705,6 +707,33 @@ app.get(endpoints["Get ATM ID By ATM Type"], (req, res) => {
             return;
         }
         res.json(result);
+    });
+});
+
+//Get Returning And None
+app.get(endpoints["Get Returning And None"], (req, res) => {
+    const sql = 'SELECT * FROM returning_and_none;';
+    db.query(sql, (err, result) => {
+        if (err) {
+            console.error('Error executing query: ', err);
+            res.status(500).json({ error: 'Internal server error.' + err });
+            return;
+        }
+        res.json(result);
+    });
+});
+
+//Set Billing
+app.post(endpoints["Set Billing"], (req, res) => {
+    const { inv_date, app_num, selected_doctor, doctor_charge, drug_name, drug_id, quantity, unit_price, discount, total_amount } = req.body;
+    const sql = 'INSERT INTO billing (inv_date, app_num, selected_doctor, doctor_charge, drug_name, drug_id, quantity, unit_price, discount, total_amount) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+    db.query(sql, [inv_date, app_num, selected_doctor, doctor_charge, drug_name, drug_id, quantity, unit_price, discount, total_amount], (err, result) => {
+        if (err) {
+            console.error('Error executing query: ', err);
+            res.status(500).json({ error: 'Internal server error.' + err });
+            return;
+        }
+        res.json({ message: 'Billing added successfully.' });
     });
 });
 
