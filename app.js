@@ -65,7 +65,7 @@ app.use(cors(corsOptions));
 
 //Online Test
 app.get(endpoints["Root"], (req, res) => {
-    res.send('Hi!, I am Online!!!');
+    res.send('<center><h1>Hi!, I am Online!!!</h1></center>');
 });
 
 //Get Endpoints
