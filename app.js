@@ -54,6 +54,7 @@ const endpoints = {
     "Get Channelling Doctor ID By Doctor Type": '/get_cd_id/:d_type',
     "Get ATM ID By ATM Type": '/get_atm_id/:atm_type',
     "Get Stock Type ID By Stock Type": '/get_stock_type_id/:stock_type',
+    "Get Expire Type ID By Expire Type": '/get_expire_type_id/:expire_type',
     "Get Stock Types": '/get_stock_types',
     "Get Expire Types": '/get_expire_types',
     "Get Returning And None": "/get_returning_none",
@@ -721,6 +722,24 @@ app.get(endpoints["Get Stock Type ID By Stock Type"], (req, res) => {
     }
     const sql = 'SELECT stock_type_id FROM stock_type WHERE stock_type = ?;';
     db.query(sql, [stock_type], (err, result) => {
+        if (err) {
+            console.error('Error executing query: ', err);
+            res.status(500).json({ error: 'Internal server error.' + err });
+            return;
+        }
+        res.json(result);
+    });
+});
+
+//Get Expire Type ID By Expire Type
+app.get(endpoints["Get Expire Type ID By Expire Type"], (req, res) => {
+    const expire_type = req.params.expire_type;
+    if (!expire_type === '') {
+        res.status(400).json({ error: 'Expire Type cannot be empty.' });
+        return;
+    }
+    const sql = 'SELECT expire_type_id FROM expire_type WHERE expire_type = ?;';
+    db.query(sql, [expire_type], (err, result) => {
         if (err) {
             console.error('Error executing query: ', err);
             res.status(500).json({ error: 'Internal server error.' + err });
