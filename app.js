@@ -53,6 +53,7 @@ const endpoints = {
     "Get Appointment ID By Appointment Name": '/get_app_id/:at_name',
     "Get Channelling Doctor ID By Doctor Type": '/get_cd_id/:d_type',
     "Get ATM ID By ATM Type": '/get_atm_id/:atm_type',
+    "Get Stock Type ID By Stock Type": '/get_stock_type_id/:stock_type',
     "Get Stock Types": '/get_stock_types',
     "Get Expire Types": '/get_expire_types',
     "Get Returning And None": "/get_returning_none",
@@ -702,6 +703,24 @@ app.get(endpoints["Get ATM ID By ATM Type"], (req, res) => {
     }
     const sql = 'SELECT atm_id FROM appointment_time WHERE atm_type = ?;';
     db.query(sql, [atm_type], (err, result) => {
+        if (err) {
+            console.error('Error executing query: ', err);
+            res.status(500).json({ error: 'Internal server error.' + err });
+            return;
+        }
+        res.json(result);
+    });
+});
+
+//Get Stock Type ID By Stock Type
+app.get(endpoints["Get Stock Type ID By Stock Type"], (req, res) => {
+    const stock_type = req.params.stock_type;
+    if (!stock_type === '') {
+        res.status(400).json({ error: 'Stock Type cannot be empty.' });
+        return;
+    }
+    const sql = 'SELECT stock_type_id FROM stock_type WHERE stock_type = ?;';
+    db.query(sql, [stock_type], (err, result) => {
         if (err) {
             console.error('Error executing query: ', err);
             res.status(500).json({ error: 'Internal server error.' + err });
