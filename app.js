@@ -803,7 +803,7 @@ app.get(endpoints["Get Expire Types"], (req, res) => {
 });
 
 // Update Stock By Product ID
-app.put(endpoints["Update Stock By Product ID"], (req, res) => {
+app.post(endpoints["Update Stock By Product ID"], (req, res) => {
     const { brand_name, prdct_name, mfd_date, exp_date, ac_price, sell_price, med_type, stock_type, expire_type } = req.body;
     const _prdct_id = req.params.prdct_id;
     const sql = 'UPDATE stock SET brand_name=?, prdct_name=?, mfd_date=?, exp_date=?, ac_price=?, sell_price=?, med_type=?, stock_type=?, expire_type=? WHERE prdct_id=?';
