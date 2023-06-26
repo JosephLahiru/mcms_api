@@ -435,7 +435,7 @@ app.post(endpoints["Set Appointment"], (req, res) => {
 });
 
 // Update Appoinment By App Num
-app.put(endpoints["Update Appoinment By App Num"], (req, res) => {
+app.post(endpoints["Update Appoinment By App Num"], (req, res) => {
     const { first_name, last_name, nic, address, age, gender, contact_num, email, p_type, cd_id } = req.body;
     const appointmentId = req.params.app_num;
     const sql = 'UPDATE appointment SET first_name=?, last_name=?, nic=?, address=?, age=?, gender=?, contact_num=?, email=?, p_type=?, cd_id=? WHERE app_num=?';
