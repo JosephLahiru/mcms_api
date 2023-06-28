@@ -60,7 +60,8 @@ const endpoints = {
     "Get Returning And None": "/get_returning_none",
     "Set Billing": "/set_billing",
     "Update Stock By Product ID": "/update_stock/:prdct_id",
-    "Update Seen Status": '/update_seen_status'
+    "Update Seen Status": '/update_seen_status',
+    "Get Seen Count": '/get_seen_count'
 }
 
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -829,6 +830,19 @@ app.post(endpoints["Update Seen Status"], (req, res) => {
             return;
         }
         res.json({ message: 'Notification marked as seen successfully.' });
+    });
+});
+
+//Get Seen Count
+app.get(endpoints["Get Seen Count"], (req, res) => {
+    const sql = 'SELECT COUNT(*) as count FROM notification WHERE seen = 0;';
+    db.query(sql, (err, result) => {
+        if (err) {
+            console.error('Error executing query: ', err);
+            res.status(500).json({ error: 'Internal server error.' + err });
+            return;
+        }
+        res.json(result[0].count);
     });
 });
 
