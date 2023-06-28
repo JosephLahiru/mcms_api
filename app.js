@@ -59,7 +59,8 @@ const endpoints = {
     "Get Expire Types": '/get_expire_types',
     "Get Returning And None": "/get_returning_none",
     "Set Billing": "/set_billing",
-    "Update Stock By Product ID": "/update_stock/:prdct_id"
+    "Update Stock By Product ID": "/update_stock/:prdct_id",
+    "Update Seen Status": '/update_seen_status'
 }
 
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -816,6 +817,21 @@ app.post(endpoints["Update Stock By Product ID"], (req, res) => {
         res.json({ message: 'Stock updated successfully.' });
     });
 });
+
+// Update Seen Status
+app.post(endpoints["Update Seen Status"], (req, res) => {
+    const { not_id } = req.body;
+    const sql = 'UPDATE notification SET seen = 1 WHERE not_id = ?';
+    db.query(sql, [not_id], (err, result) => {
+        if (err) {
+            console.error('Error executing query: ', err);
+            res.status(500).json({ error: 'Internal server error.' + err });
+            return;
+        }
+        res.json({ message: 'Notification marked as seen successfully.' });
+    });
+});
+
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
