@@ -354,7 +354,7 @@ app.post(endpoints["Set Attendance"], (req, res) => {
 
 //Get Appointment
 app.get(endpoints["Get Appointment"], (req, res) => {
-    const sql = 'SELECT * FROM appointment WHERE a.deleted = 0';
+    const sql = 'SELECT * FROM appointment WHERE deleted = 0';
     db.query(sql, (err, result) => {
         if (err) {
             console.error('Error executing query: ', err);
@@ -411,7 +411,7 @@ app.get(endpoints["Get Appointment By App Num"], (req, res) => {
         res.status(400).json({ error: 'Invalid Appoinment Number format.' });
         return;
     }
-    const sql = 'SELECT * FROM appointment WHERE a.deleted = 0 AND app_num = ?';
+    const sql = 'SELECT * FROM appointment WHERE deleted = 0 AND app_num = ?';
     db.query(sql, [app_num], (err, result) => {
         if (err) {
             console.error('Error executing query: ', err);
