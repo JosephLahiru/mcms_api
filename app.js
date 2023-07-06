@@ -425,9 +425,9 @@ app.get(endpoints["Get Appointment By App Num"], (req, res) => {
 
 //Set Appointment
 app.post(endpoints["Set Appointment"], (req, res) => {
-    const { first_name, last_name, address, age, gender, nic, email, contact_num, at_id, cd_id, app_date, atm_id, app_num } = req.body;
-    const sql = 'INSERT INTO appointment (first_name, last_name, address, age, gender, nic, email, contact_num, at_id, cd_id, app_date, atm_id, app_num) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
-    db.query(sql, [first_name, last_name, address, age, gender, nic, email, contact_num, at_id, cd_id, app_date, atm_id, app_num], (err, result) => {
+    const { patient_name, area, age, gender, mobile, cd_id, app_date, app_num } = req.body;
+    const sql = 'INSERT INTO appointment (patient_name, area, age, gender, mobile, cd_id, app_date, app_num) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
+    db.query(sql, [patient_name, area, age, gender, mobile, cd_id, app_date, app_num], (err, result) => {
         if (err) {
             console.error('Error executing query: ', err);
             res.status(500).json({ error: 'Internal server error.' + err });
