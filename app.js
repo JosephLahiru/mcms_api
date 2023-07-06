@@ -869,7 +869,7 @@ app.get(endpoints["Get Current App Num"], (req, res) => {
         res.status(400).json({ error: 'Current date cannot be empty.' });
         return;
     }
-    const sql = 'SELECT MAX(app_num) FROM appointment WHERE app_date = ?;';
+    const sql = 'SELECT MAX(app_num) AS max_app_num FROM appointment WHERE app_date = ?;';
     db.query(sql, [curr_date], (err, result) => {
         if (err) {
             console.error('Error executing query: ', err);
