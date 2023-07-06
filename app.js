@@ -63,7 +63,7 @@ const endpoints = {
     "Update Seen Status": '/update_seen_status',
     "Get Seen Count": '/get_seen_count',
     "Get Doctor Names": '/get_doctor_names',
-    "Get Current App Num": '/get_curr_app_num/:curr_date'
+    "Get Current App Num": '/get_curr_app_num/:curr_date/:cd_id'
 }
 
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -865,12 +865,13 @@ app.get(endpoints["Get Doctor Names"], (req, res) => {
 //Get Current App Num
 app.get(endpoints["Get Current App Num"], (req, res) => {
     const curr_date = req.params.curr_date;
+    const cd_id = req.params.cd_id;
     if (!curr_date === '') {
         res.status(400).json({ error: 'Current date cannot be empty.' });
         return;
     }
-    const sql = 'SELECT MAX(app_num) AS max_app_num FROM appointment WHERE app_date = ?;';
-    db.query(sql, [curr_date], (err, result) => {
+    const sql = 'SELECT MAX(app_num) AS max_app_num FROM appointment WHERE app_date = ? AND cd_id=?;';
+    db.query(sql, [curr_date, cd_id], (err, result) => {
         if (err) {
             console.error('Error executing query: ', err);
             res.status(500).json({ error: 'Internal server error.' + err });
