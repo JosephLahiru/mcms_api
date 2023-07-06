@@ -35,7 +35,7 @@ const endpoints = {
     "Get Appointment By NIC": '/get_appointment_nic/:nic',
     "Get Appointment By App Num": '/get_appointment/:app_num',
     "Set Appointment": '/set_appointment',
-    "Update Appoinment By App Num": '/update_appointment/:app_num',
+    "Update Appoinment By App ID": '/update_appointment/:app_id',
     "Get Notification": '/get_notification',
     "Set Notification": '/set_notification',
     "Get Stock": '/get_stock',
@@ -437,12 +437,12 @@ app.post(endpoints["Set Appointment"], (req, res) => {
     });
 });
 
-// Update Appoinment By App Num
-app.post(endpoints["Update Appoinment By App Num"], (req, res) => {
-    const { first_name, last_name, nic, address, age, gender, contact_num, email, p_type, cd_id } = req.body;
-    const appointmentId = req.params.app_num;
-    const sql = 'UPDATE appointment SET first_name=?, last_name=?, nic=?, address=?, age=?, gender=?, contact_num=?, email=?, p_type=?, cd_id=? WHERE app_num=?';
-    db.query(sql, [first_name, last_name, nic, address, age, gender, contact_num, email, p_type, cd_id, appointmentId], (err, result) => {
+// Update Appoinment By App ID
+app.post(endpoints["Update Appoinment By App ID"], (req, res) => {
+    const { patient_name, area, age, gender, mobile, cd_id } = req.body;
+    const appointmentId = req.params.app_id;
+    const sql = 'UPDATE appointment SET patient_name=?, area=?, age=?, gender=?, mobile=?, cd_id=? WHERE app_num=?';
+    db.query(sql, [patient_name, area, age, gender, mobile, cd_id, appointmentId], (err, result) => {
         if (err) {
             console.error('Error executing query: ', err);
             res.status(500).json({ error: 'Internal server error.' + err });
