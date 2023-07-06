@@ -35,7 +35,7 @@ const endpoints = {
     "Get Appointment By NIC": '/get_appointment_nic/:nic',
     "Get Appointment By App Num": '/get_appointment/:app_num',
     "Set Appointment": '/set_appointment',
-    "Update Appoinment By App Num": '/update_appointment/:app_num',
+    "Update Appoinment By App ID": '/update_appointment/:app_id',
     "Get Notification": '/get_notification',
     "Set Notification": '/set_notification',
     "Get Stock": '/get_stock',
@@ -61,7 +61,9 @@ const endpoints = {
     "Set Billing": "/set_billing",
     "Update Stock By Product ID": "/update_stock/:prdct_id",
     "Update Seen Status": '/update_seen_status',
-    "Get Seen Count": '/get_seen_count'
+    "Get Seen Count": '/get_seen_count',
+    "Get Doctor Names": '/get_doctor_names',
+    "Get Current App Num": '/get_curr_app_num/:curr_date'
 }
 
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -424,9 +426,9 @@ app.get(endpoints["Get Appointment By App Num"], (req, res) => {
 
 //Set Appointment
 app.post(endpoints["Set Appointment"], (req, res) => {
-    const { first_name, last_name, address, age, gender, nic, email, contact_num, at_id, cd_id, app_date, atm_id, app_num } = req.body;
-    const sql = 'INSERT INTO appointment (first_name, last_name, address, age, gender, nic, email, contact_num, at_id, cd_id, app_date, atm_id, app_num) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
-    db.query(sql, [first_name, last_name, address, age, gender, nic, email, contact_num, at_id, cd_id, app_date, atm_id, app_num], (err, result) => {
+    const { patient_name, area, age, gender, mobile, cd_id, app_date, app_num } = req.body;
+    const sql = 'INSERT INTO appointment (patient_name, area, age, gender, mobile, cd_id, app_date, app_num) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
+    db.query(sql, [patient_name, area, age, gender, mobile, cd_id, app_date, app_num], (err, result) => {
         if (err) {
             console.error('Error executing query: ', err);
             res.status(500).json({ error: 'Internal server error.' + err });
@@ -436,12 +438,12 @@ app.post(endpoints["Set Appointment"], (req, res) => {
     });
 });
 
-// Update Appoinment By App Num
-app.post(endpoints["Update Appoinment By App Num"], (req, res) => {
-    const { first_name, last_name, nic, address, age, gender, contact_num, email, p_type, cd_id } = req.body;
-    const appointmentId = req.params.app_num;
-    const sql = 'UPDATE appointment SET first_name=?, last_name=?, nic=?, address=?, age=?, gender=?, contact_num=?, email=?, p_type=?, cd_id=? WHERE app_num=?';
-    db.query(sql, [first_name, last_name, nic, address, age, gender, contact_num, email, p_type, cd_id, appointmentId], (err, result) => {
+// Update Appoinment By App ID
+app.post(endpoints["Update Appoinment By App ID"], (req, res) => {
+    const { patient_name, area, age, gender, mobile, cd_id } = req.body;
+    const appointmentId = req.params.app_id;
+    const sql = 'UPDATE appointment SET patient_name=?, area=?, age=?, gender=?, mobile=?, cd_id=? WHERE app_num=?';
+    db.query(sql, [patient_name, area, age, gender, mobile, cd_id, appointmentId], (err, result) => {
         if (err) {
             console.error('Error executing query: ', err);
             res.status(500).json({ error: 'Internal server error.' + err });
@@ -846,6 +848,37 @@ app.get(endpoints["Get Seen Count"], (req, res) => {
     });
 });
 
+
+//Get Doctor Names
+app.get(endpoints["Get Doctor Names"], (req, res) => {
+    const sql = 'SELECT doctor_name, d_type FROM channelling_doctor;';
+    db.query(sql, (err, result) => {
+        if (err) {
+            console.error('Error executing query: ', err);
+            res.status(500).json({ error: 'Internal server error.' + err });
+            return;
+        }
+        res.json(result);
+    });
+});
+
+//Get Current App Num
+app.get(endpoints["Get Current App Num"], (req, res) => {
+    const curr_date = req.params.curr_date;
+    if (!curr_date === '') {
+        res.status(400).json({ error: 'Current date cannot be empty.' });
+        return;
+    }
+    const sql = 'SELECT MAX(app_num) AS max_app_num FROM appointment WHERE app_date = ?;';
+    db.query(sql, [curr_date], (err, result) => {
+        if (err) {
+            console.error('Error executing query: ', err);
+            res.status(500).json({ error: 'Internal server error.' + err });
+            return;
+        }
+        res.json(result);
+    });
+});
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
