@@ -61,7 +61,8 @@ const endpoints = {
     "Set Billing": "/set_billing",
     "Update Stock By Product ID": "/update_stock/:prdct_id",
     "Update Seen Status": '/update_seen_status',
-    "Get Seen Count": '/get_seen_count'
+    "Get Seen Count": '/get_seen_count',
+    "Get Doctor Names": '/get_doctor_names'
 }
 
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -846,6 +847,19 @@ app.get(endpoints["Get Seen Count"], (req, res) => {
     });
 });
 
+
+//Get Doctor Names
+app.get(endpoints["Get Doctor Names"], (req, res) => {
+    const sql = 'SELECT doctor_name FROM channelling_doctor;';
+    db.query(sql, (err, result) => {
+        if (err) {
+            console.error('Error executing query: ', err);
+            res.status(500).json({ error: 'Internal server error.' + err });
+            return;
+        }
+        res.json(result);
+    });
+});
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
