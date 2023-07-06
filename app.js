@@ -848,7 +848,6 @@ app.get(endpoints["Get Seen Count"], (req, res) => {
     });
 });
 
-
 //Get Doctor Names
 app.get(endpoints["Get Doctor Names"], (req, res) => {
     const sql = 'SELECT doctor_name, d_type FROM channelling_doctor;';
