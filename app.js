@@ -850,7 +850,7 @@ app.get(endpoints["Get Seen Count"], (req, res) => {
 
 //Get Doctor Names
 app.get(endpoints["Get Doctor Names"], (req, res) => {
-    const sql = 'SELECT doctor_name, d_type FROM channelling_doctor;';
+    const sql = 'SELECT cd_id, doctor_name, d_type FROM channelling_doctor;';
     db.query(sql, (err, result) => {
         if (err) {
             console.error('Error executing query: ', err);
