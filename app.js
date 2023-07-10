@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const db = require('./db');
 const cors = require('cors');
+const jwt = require('jsonwebtoken');
 
 const app = express();
 
@@ -11,7 +12,26 @@ const corsOptions = {
     allowedHeaders: 'Content-Type,Authorization',
 };
 
+const authenticateToken = (req, res, next) => {
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1];
+  
+    if (token == null) {
+      return res.sendStatus(401);
+    }
+  
+    jwt.verify(token, 'YouTookMyHeartAwayWhenMyWholeWorldWasGray', (err, user) => {
+      if (err) {
+        return res.sendStatus(403);
+      }
+  
+      req.user = user;
+      next();
+    });
+  };
+
 const endpoints = {
+    "Request Token": '/request_token',
     "Root": '/', 
     "Get Doctors": '/get_doctors', 
     "Get Channelling Doctors": '/get_channelling_doctors',
@@ -63,12 +83,33 @@ const endpoints = {
     "Update Seen Status": '/update_seen_status',
     "Get Seen Count": '/get_seen_count',
     "Get Doctor Names": '/get_doctor_names',
-    "Get Current App Num": '/get_curr_app_num/:curr_date/:cd_id'
+    "Get Current App Num": '/get_curr_app_num/:curr_date/:cd_id',
+    "Get User Details": '/get_user_details'
 }
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cors(corsOptions));
+
+const users = [
+    { id: 1, username: 'admin', password: 'adminpwd@1234!' },
+    { id: 2, username: 'joe', password: 'joepwd@1234!' },
+  ];
+
+app.post(endpoints["Request Token"], (req, res) => {
+    const { username, password } = req.body;
+  
+    const user = users.find((u) => u.username === username);
+
+    if (!user || user.password !== password) {
+      return res.status(401).json({ error: 'Invalid username or password' });
+    }
+  
+    const token = jwt.sign(user, 'YouTookMyHeartAwayWhenMyWholeWorldWasGray');
+
+    res.json({ token });
+});
+  
 
 //Online Test
 app.get(endpoints["Root"], (req, res) => {
@@ -871,6 +912,19 @@ app.get(endpoints["Get Current App Num"], (req, res) => {
     }
     const sql = 'SELECT MAX(app_num) AS max_app_num FROM appointment WHERE app_date = ? AND cd_id=?;';
     db.query(sql, [curr_date, cd_id], (err, result) => {
+        if (err) {
+            console.error('Error executing query: ', err);
+            res.status(500).json({ error: 'Internal server error.' + err });
+            return;
+        }
+        res.json(result);
+    });
+});
+
+//Get User Details
+app.get(endpoints["Get User Details"], authenticateToken, (req, res) => {
+    const sql = 'SELECT * FROM user;';
+    db.query(sql, (err, result) => {
         if (err) {
             console.error('Error executing query: ', err);
             res.status(500).json({ error: 'Internal server error.' + err });
