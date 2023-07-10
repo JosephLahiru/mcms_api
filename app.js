@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const db = require('./db');
 const cors = require('cors');
+const jwt = require('jsonwebtoken');
 
 const app = express();
 
@@ -11,7 +12,26 @@ const corsOptions = {
     allowedHeaders: 'Content-Type,Authorization',
 };
 
+const authenticateToken = (req, res, next) => {
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1];
+  
+    if (token == null) {
+      return res.sendStatus(401);
+    }
+  
+    jwt.verify(token, 'YouTookMyHeartAwayWhenMyWholeWorldWasGray', (err, user) => {
+      if (err) {
+        return res.sendStatus(403);
+      }
+  
+      req.user = user;
+      next();
+    });
+  };
+
 const endpoints = {
+    "Request Token": '/request_token',
     "Root": '/', 
     "Get Doctors": '/get_doctors', 
     "Get Channelling Doctors": '/get_channelling_doctors',
@@ -69,6 +89,26 @@ const endpoints = {
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cors(corsOptions));
+
+const users = [
+    { id: 1, username: 'admin', password: 'adminpwd' },
+    { id: 2, username: 'joe', password: 'joepwd' },
+  ];
+
+app.post(endpoints["Request Token"], (req, res) => {
+    const { username, password } = req.body;
+  
+    const user = users.find((u) => u.username === username);
+
+    if (!user || user.password !== password) {
+      return res.status(401).json({ error: 'Invalid username or password' });
+    }
+  
+    const token = jwt.sign(user, 'YouTookMyHeartAwayWhenMyWholeWorldWasGray');
+
+    res.json({ token });
+});
+  
 
 //Online Test
 app.get(endpoints["Root"], (req, res) => {
