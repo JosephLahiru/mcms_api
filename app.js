@@ -83,7 +83,8 @@ const endpoints = {
     "Update Seen Status": '/update_seen_status',
     "Get Seen Count": '/get_seen_count',
     "Get Doctor Names": '/get_doctor_names',
-    "Get Current App Num": '/get_curr_app_num/:curr_date/:cd_id'
+    "Get Current App Num": '/get_curr_app_num/:curr_date/:cd_id',
+    "Get User Details": '/get_user_details'
 }
 
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -91,8 +92,8 @@ app.use(bodyParser.json());
 app.use(cors(corsOptions));
 
 const users = [
-    { id: 1, username: 'admin', password: 'adminpwd' },
-    { id: 2, username: 'joe', password: 'joepwd' },
+    { id: 1, username: 'admin', password: 'adminpwd@1234!' },
+    { id: 2, username: 'joe', password: 'joepwd@1234!' },
   ];
 
 app.post(endpoints["Request Token"], (req, res) => {
@@ -911,6 +912,19 @@ app.get(endpoints["Get Current App Num"], (req, res) => {
     }
     const sql = 'SELECT MAX(app_num) AS max_app_num FROM appointment WHERE app_date = ? AND cd_id=?;';
     db.query(sql, [curr_date, cd_id], (err, result) => {
+        if (err) {
+            console.error('Error executing query: ', err);
+            res.status(500).json({ error: 'Internal server error.' + err });
+            return;
+        }
+        res.json(result);
+    });
+});
+
+//Get User Details
+app.get(endpoints["Get User Details"], authenticateToken, (req, res) => {
+    const sql = 'SELECT * FROM user;';
+    db.query(sql, (err, result) => {
         if (err) {
             console.error('Error executing query: ', err);
             res.status(500).json({ error: 'Internal server error.' + err });
