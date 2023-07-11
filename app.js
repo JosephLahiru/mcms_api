@@ -83,7 +83,8 @@ const endpoints = {
     "Get Seen Count": '/get_seen_count',
     "Get Doctor Names": '/get_doctor_names',
     "Get Current App Num": '/get_curr_app_num/:curr_date/:cd_id',
-    "Get User Details": '/get_user_details'
+    "Get User Details": '/get_user_details',
+    "Authenticate User": '/user_authenticate'
 }
 
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -911,6 +912,27 @@ app.get(endpoints["Get User Details"], authenticateToken, (req, res) => {
             return;
         }
         res.json(result);
+    });
+});
+
+//Authenticate User
+app.post(endpoints["Authenticate User"], (req, res) => {
+    const { email, password } = req.body;
+  
+    const sql = 'SELECT type FROM user WHERE email = ? AND password = ?';
+    db.query(sql, [email, password], (err, result) => {
+        if (err) {
+        console.error('Error executing query: ', err);
+        res.status(500).json({ error: 'Internal server error.' + err });
+        return;
+        }
+
+        if (result.length === 0) {
+        res.status(401).json({ error: 'Authentication failed. Invalid email or password.' });
+        } else {
+        const userType = result[0].type;
+        res.status(200).json({ message: 'Authentication successful.', userType });
+        }
     });
 });
 
