@@ -921,20 +921,20 @@ app.post(endpoints["Authenticate User"], (req, res) => {
   
     const sql = 'SELECT type FROM user WHERE email = ? AND password = ?';
     db.query(sql, [email, password], (err, result) => {
-      if (err) {
+        if (err) {
         console.error('Error executing query: ', err);
         res.status(500).json({ error: 'Internal server error.' + err });
         return;
-      }
-  
-      if (result.length === 0) {
+        }
+
+        if (result.length === 0) {
         res.status(401).json({ error: 'Authentication failed. Invalid email or password.' });
-      } else {
+        } else {
         const userType = result[0].type;
         res.status(200).json({ message: 'Authentication successful.', userType });
-      }
+        }
     });
-  });
+});
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
