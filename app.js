@@ -52,8 +52,6 @@ const endpoints = {
     "Set Attendance": '/set_attendance',
     "Get Appointment": '/get_appointment',
     "Delete Appointment By Appo ID": '/delete_appointment/:appo_id',
-    // "Get Appointment By NIC": '/get_appointment_nic/:nic',
-    // "Get Appointment By App Num": '/get_appointment/:app_num',
     "Get Appointment By App ID": '/get_appointment/:appo_id',
     "Set Appointment": '/set_appointment',
     "Update Appoinment By App ID": '/update_appointment/:app_id',
@@ -427,44 +425,6 @@ app.get(endpoints["Delete Appointment By Appo ID"], (req, res) => {
         res.json(result);
     });
 });
-
-// //Get Appointment By NIC
-// app.get(endpoints["Get Appointment By NIC"], (req, res) => {
-//     const nic = req.params.nic;
-//     const nicRegex = /^([0-9]{9}[x|X|v|V]|[0-9]{12})$/;
-//     if (!nicRegex.test(nic)) {
-//         res.status(400).json({ error: 'Invalid NIC format.' });
-//         return;
-//     }
-//     const sql = 'SELECT * FROM appointment WHERE a.deleted = 0 AND nic = ?';
-//     db.query(sql, [nic], (err, result) => {
-//         if (err) {
-//             console.error('Error executing query: ', err);
-//             res.status(500).json({ error: 'Internal server error.' + err });
-//             return;
-//         }
-//         res.json(result);
-//     });
-// });
-
-// //Get Appointment By App Num
-// app.get(endpoints["Get Appointment By App Num"], (req, res) => {
-//     const app_num = req.params.app_num;
-//     const app_numRegex = /^[0-9]$/
-//     if (!app_numRegex.test(app_num)) {
-//         res.status(400).json({ error: 'Invalid Appoinment Number format.' });
-//         return;
-//     }
-//     const sql = 'SELECT * FROM appointment WHERE deleted = 0 AND app_num = ?';
-//     db.query(sql, [app_num], (err, result) => {
-//         if (err) {
-//             console.error('Error executing query: ', err);
-//             res.status(500).json({ error: 'Internal server error.' + err });
-//             return;
-//         }
-//         res.json(result);
-//     });
-// });
 
 //Get Appointment By App ID
 app.get(endpoints["Get Appointment By App ID"], (req, res) => {
