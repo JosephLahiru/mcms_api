@@ -919,19 +919,21 @@ app.get(endpoints["Get User Details"], authenticateToken, (req, res) => {
 app.post(endpoints["Authenticate User"], (req, res) => {
     const { email, password } = req.body;
   
-    const sql = 'SELECT type FROM user WHERE email = ? AND password = ?';
+    const sql = 'SELECT username, type, image_url FROM user WHERE email = ? AND password = ?';
     db.query(sql, [email, password], (err, result) => {
         if (err) {
-        console.error('Error executing query: ', err);
-        res.status(500).json({ error: 'Internal server error.' + err });
-        return;
+            console.error('Error executing query: ', err);
+            res.status(500).json({ error: 'Internal server error.' + err });
+            return;
         }
 
         if (result.length === 0) {
-        res.status(401).json({ error: 'Authentication failed. Invalid email or password.' });
+            res.status(401).json({ error: 'Authentication failed. Invalid email or password.' });
         } else {
-        const userType = result[0].type;
-        res.status(200).json({ message: 'Authentication successful.', userType });
+            const userName = result[0].username;
+            const userType = result[0].type;
+            const imageUrl = result[0].image_url;
+            res.status(200).json({ message: 'Authentication successful.', user_name: userName, user_type: userType, image_url: imageUrl });
         }
     });
 });
