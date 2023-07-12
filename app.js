@@ -84,7 +84,8 @@ const endpoints = {
     "Get Doctor Names": '/get_doctor_names',
     "Get Current App Num": '/get_curr_app_num/:curr_date/:cd_id',
     "Get User Details": '/get_user_details',
-    "Authenticate User": '/user_authenticate'
+    "Authenticate User": '/user_authenticate',
+    "Get Assistants": '/get_assistants'
 }
 
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -935,6 +936,19 @@ app.post(endpoints["Authenticate User"], (req, res) => {
             const imageUrl = result[0].image_url;
             res.status(200).json({ message: 'Authentication successful.', user_name: userName, user_type: userType, image_url: imageUrl });
         }
+    });
+});
+
+//Get Assistants
+app.get(endpoints["Get Assistants"], (req, res) => {
+    const sql = 'SELECT * FROM assistent';
+    db.query(sql, (err, result) => {
+        if (err) {
+            console.error('Error executing query: ', err);
+            res.status(500).json({ error: 'Internal server error.' + err });
+            return;
+        }
+        res.json(result);
     });
 });
 
