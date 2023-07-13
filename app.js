@@ -85,7 +85,8 @@ const endpoints = {
     "Get Current App Num": '/get_curr_app_num/:curr_date/:cd_id',
     "Get User Details": '/get_user_details',
     "Authenticate User": '/user_authenticate',
-    "Get Assistants": '/get_assistants'
+    "Get Assistants": '/get_assistants',
+    "Confirm Appointment Payment By Appo ID": '/confirm_app_payment'
 }
 
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -943,6 +944,25 @@ app.post(endpoints["Authenticate User"], (req, res) => {
 app.get(endpoints["Get Assistants"], (req, res) => {
     const sql = 'SELECT * FROM assistent';
     db.query(sql, (err, result) => {
+        if (err) {
+            console.error('Error executing query: ', err);
+            res.status(500).json({ error: 'Internal server error.' + err });
+            return;
+        }
+        res.json(result);
+    });
+});
+
+//Confirm Appointment Payment By Appo ID
+app.get(endpoints["Confirm Appointment Payment By Appo ID"], (req, res) => {
+    const appo_id = req.params.appo_id;
+    const appo_idRegex = /^(?:[1-9]|[1-9]\d{1,2}|999)$/;
+    if (!appo_idRegex.test(appo_id)) {
+        res.status(400).json({ error: 'Invalid Appointment ID format.' });
+        return;
+    }
+    const sql = 'UPDATE appointment SET payment = 1 WHERE app_id = ?';
+    db.query(sql, [appo_id], (err, result) => {
         if (err) {
             console.error('Error executing query: ', err);
             res.status(500).json({ error: 'Internal server error.' + err });
