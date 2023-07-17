@@ -450,9 +450,9 @@ app.get(endpoints["Get Appointment By App ID"], (req, res) => {
 
 //Set Appointment
 app.post(endpoints["Set Appointment"], (req, res) => {
-    const { patient_name, area, age, gender, mobile, cd_id, app_date, app_num } = req.body;
-    const sql = 'INSERT INTO appointment (patient_name, area, age, gender, mobile, cd_id, app_date, app_num) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
-    db.query(sql, [patient_name, area, age, gender, mobile, cd_id, app_date, app_num], (err, result) => {
+    const { patient_name, area, age, gender, mobile, cd_id, app_date, app_num, nic } = req.body;
+    const sql = 'INSERT INTO appointment (patient_name, area, age, gender, mobile, cd_id, app_date, app_num, nic) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)';
+    db.query(sql, [patient_name, area, age, gender, mobile, cd_id, app_date, app_num, nic], (err, result) => {
         if (err) {
             console.error('Error executing query: ', err);
             res.status(500).json({ error: 'Internal server error.' + err });
@@ -464,10 +464,10 @@ app.post(endpoints["Set Appointment"], (req, res) => {
 
 // Update Appoinment By App ID
 app.post(endpoints["Update Appoinment By App ID"], (req, res) => {
-    const { patient_name, area, age, gender, mobile } = req.body;
+    const { patient_name, area, age, gender, mobile, nic } = req.body;
     const appointmentId = req.params.app_id;
-    const sql = 'UPDATE appointment SET patient_name=?, area=?, age=?, gender=?, mobile=? WHERE app_id=?';
-    db.query(sql, [patient_name, area, age, gender, mobile, appointmentId], (err, result) => {
+    const sql = 'UPDATE appointment SET patient_name=?, area=?, age=?, gender=?, mobile=?, nic=? WHERE app_id=?';
+    db.query(sql, [patient_name, area, age, gender, mobile, nic, appointmentId], (err, result) => {
         if (err) {
             console.error('Error executing query: ', err);
             res.status(500).json({ error: 'Internal server error.' + err });
