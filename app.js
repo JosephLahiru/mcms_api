@@ -87,7 +87,7 @@ const endpoints = {
     "Authenticate User": '/user_authenticate',
     "Get Assistants": '/get_assistants',
     "Confirm Appointment Payment By Appo ID": '/confirm_app_payment/:appo_id',
-    "Get Personal Titles": 'get_personal_titles'
+    "Get Personal Titles": '/get_personal_titles'
 }
 
 app.use(bodyParser.urlencoded({ extended: true }));
