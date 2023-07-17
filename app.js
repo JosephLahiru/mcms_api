@@ -87,7 +87,8 @@ const endpoints = {
     "Authenticate User": '/user_authenticate',
     "Get Assistants": '/get_assistants',
     "Confirm Appointment Payment By Appo ID": '/confirm_app_payment/:appo_id',
-    "Get Personal Titles": '/get_personal_titles'
+    "Get Personal Titles": '/get_personal_titles',
+    "Get Latest Appointment ID": '/get_lat_app_id'
 }
 
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -983,6 +984,20 @@ app.get(endpoints["Get Personal Titles"], (req, res) => {
             return;
         }
         res.json(result);
+    });
+});
+
+//Get Latest Appointment ID
+app.get(endpoints["Get Latest Appointment ID"], (req, res) => {
+    const sql = 'SELECT MAX(app_id) AS app_id FROM appointment';
+    db.query(sql, (err, result) => {
+        if (err) {
+            console.error('Error executing query: ', err);
+            res.status(500).json({ error: 'Internal server error.' + err });
+            return;
+        }
+        const app_id = result[0].app_id;
+        res.json({ app_id });
     });
 });
 
