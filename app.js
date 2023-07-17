@@ -86,7 +86,8 @@ const endpoints = {
     "Get User Details": '/get_user_details',
     "Authenticate User": '/user_authenticate',
     "Get Assistants": '/get_assistants',
-    "Confirm Appointment Payment By Appo ID": '/confirm_app_payment/:appo_id'
+    "Confirm Appointment Payment By Appo ID": '/confirm_app_payment/:appo_id',
+    "Get Personal Titles": 'get_personal_titles'
 }
 
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -963,6 +964,19 @@ app.get(endpoints["Confirm Appointment Payment By Appo ID"], (req, res) => {
     }
     const sql = 'UPDATE appointment SET payment = 1 WHERE app_id = ?';
     db.query(sql, [appo_id], (err, result) => {
+        if (err) {
+            console.error('Error executing query: ', err);
+            res.status(500).json({ error: 'Internal server error.' + err });
+            return;
+        }
+        res.json(result);
+    });
+});
+
+//Get Personal Titles
+app.get(endpoints["Get Personal Titles"], (req, res) => {
+    const sql = 'SELECT * FROM personal_titles';
+    db.query(sql, (err, result) => {
         if (err) {
             console.error('Error executing query: ', err);
             res.status(500).json({ error: 'Internal server error.' + err });
