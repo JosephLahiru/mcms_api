@@ -399,18 +399,18 @@ app.post(endpoints["Set Attendance"], (req, res) => {
     });
 });
 
-//Get Appointment
-app.get(endpoints["Get Appointment"], (req, res) => {
-    const sql = 'SELECT * FROM appointment WHERE deleted = 0';
-    db.query(sql, (err, result) => {
-        if (err) {
-            console.error('Error executing query: ', err);
-            res.status(500).json({ error: 'Internal server error.' + err });
-            return;
-        }
-        res.json(result);
-    });
-});
+// //Get Appointment
+// app.get(endpoints["Get Appointment"], (req, res) => {
+//     const sql = 'SELECT * FROM appointment WHERE deleted = 0';
+//     db.query(sql, (err, result) => {
+//         if (err) {
+//             console.error('Error executing query: ', err);
+//             res.status(500).json({ error: 'Internal server error.' + err });
+//             return;
+//         }
+//         res.json(result);
+//     });
+// });
 
 //Delete Appointment By Appo ID
 app.get(endpoints["Delete Appointment By Appo ID"], (req, res) => {
