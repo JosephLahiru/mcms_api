@@ -399,18 +399,18 @@ app.post(endpoints["Set Attendance"], (req, res) => {
     });
 });
 
-//Get Appointment
-app.get(endpoints["Get Appointment"], (req, res) => {
-    const sql = 'SELECT * FROM appointment WHERE deleted = 0';
-    db.query(sql, (err, result) => {
-        if (err) {
-            console.error('Error executing query: ', err);
-            res.status(500).json({ error: 'Internal server error.' + err });
-            return;
-        }
-        res.json(result);
-    });
-});
+// //Get Appointment
+// app.get(endpoints["Get Appointment"], (req, res) => {
+//     const sql = 'SELECT * FROM appointment WHERE deleted = 0';
+//     db.query(sql, (err, result) => {
+//         if (err) {
+//             console.error('Error executing query: ', err);
+//             res.status(500).json({ error: 'Internal server error.' + err });
+//             return;
+//         }
+//         res.json(result);
+//     });
+// });
 
 //Delete Appointment By Appo ID
 app.get(endpoints["Delete Appointment By Appo ID"], (req, res) => {
@@ -431,24 +431,24 @@ app.get(endpoints["Delete Appointment By Appo ID"], (req, res) => {
     });
 });
 
-//Get Appointment By App ID
-app.get(endpoints["Get Appointment By App ID"], (req, res) => {
-    const appo_id = req.params.appo_id;
-    const appo_idRegex = /^(?:[1-9]|[1-9]\d{1,2}|999)$/;
-    if (!appo_idRegex.test(appo_id)) {
-        res.status(400).json({ error: 'Invalid Appoinment Number format.' });
-        return;
-    }
-    const sql = 'SELECT * FROM appointment WHERE deleted = 0 AND app_id = ?';
-    db.query(sql, [appo_id], (err, result) => {
-        if (err) {
-            console.error('Error executing query: ', err);
-            res.status(500).json({ error: 'Internal server error.' + err });
-            return;
-        }
-        res.json(result);
-    });
-});
+// //Get Appointment By App ID
+// app.get(endpoints["Get Appointment By App ID"], (req, res) => {
+//     const appo_id = req.params.appo_id;
+//     const appo_idRegex = /^(?:[1-9]|[1-9]\d{1,2}|999)$/;
+//     if (!appo_idRegex.test(appo_id)) {
+//         res.status(400).json({ error: 'Invalid Appoinment Number format.' });
+//         return;
+//     }
+//     const sql = 'SELECT * FROM appointment WHERE deleted = 0 AND app_id = ?';
+//     db.query(sql, [appo_id], (err, result) => {
+//         if (err) {
+//             console.error('Error executing query: ', err);
+//             res.status(500).json({ error: 'Internal server error.' + err });
+//             return;
+//         }
+//         res.json(result);
+//     });
+// });
 
 //Set Appointment
 app.post(endpoints["Set Appointment"], (req, res) => {
@@ -689,23 +689,23 @@ app.get(endpoints["Get Med Types"], (req, res) => {
     });
 });
 
-//Get Appointment ID By Appointment Name
-app.get(endpoints["Get Appointment ID By Appointment Name"], (req, res) => {
-    const app_name = req.params.at_name;
-    if (!app_name === '') {
-        res.status(400).json({ error: 'Appointment Name cannot be empty.' });
-        return;
-    }
-    const sql = 'SELECT at_id FROM appointment_type WHERE at_name = ?;';
-    db.query(sql, [app_name], (err, result) => {
-        if (err) {
-            console.error('Error executing query: ', err);
-            res.status(500).json({ error: 'Internal server error.' + err });
-            return;
-        }
-        res.json(result);
-    });
-});
+// //Get Appointment ID By Appointment Name
+// app.get(endpoints["Get Appointment ID By Appointment Name"], (req, res) => {
+//     const app_name = req.params.at_name;
+//     if (!app_name === '') {
+//         res.status(400).json({ error: 'Appointment Name cannot be empty.' });
+//         return;
+//     }
+//     const sql = 'SELECT at_id FROM appointment_type WHERE at_name = ?;';
+//     db.query(sql, [app_name], (err, result) => {
+//         if (err) {
+//             console.error('Error executing query: ', err);
+//             res.status(500).json({ error: 'Internal server error.' + err });
+//             return;
+//         }
+//         res.json(result);
+//     });
+// });
 
 //Get Channelling Doctor ID By Doctor Type
 app.get(endpoints["Get Channelling Doctor ID By Doctor Type"], (req, res) => {
