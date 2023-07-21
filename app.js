@@ -1005,7 +1005,7 @@ app.get(endpoints["Get Latest Appointment ID"], (req, res) => {
 // Update Doctor By Doctor ID
 app.post(endpoints["Update Doctor By Doctor ID"], (req, res) => {
     const { first_name, last_name, nic, email, address, contact_no } = req.body;
-    const doctorId = req.params.app_id;
+    const doctorId = req.params.d_id;
     const sql = 'UPDATE doctor SET first_name=?, last_name=?, nic=?, email=?, address=?, contact_no=? WHERE d_id=?';
     db.query(sql, [first_name, last_name, nic, email, address, contact_no, doctorId], (err, result) => {
         if (err) {
