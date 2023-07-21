@@ -90,6 +90,7 @@ const endpoints = {
     "Get Personal Titles": '/get_personal_titles',
     "Get Latest Appointment ID": '/get_lat_app_id',
     "Update Doctor By Doctor ID": '/update_doctor/:d_id',
+    "Delete Doctor By Doctor ID": '/delete_doctors/:d_id',
 }
 
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -1014,6 +1015,25 @@ app.post(endpoints["Update Doctor By Doctor ID"], (req, res) => {
             return;
         }
         res.json({ message: 'Doctor updated successfully.' });
+    });
+});
+
+//Delete Doctor By Doctor ID
+app.get(endpoints["Delete Doctor By Doctor ID"], (req, res) => {
+    const d_id = req.params.d_id;
+    const d_idRegex = /^D[0-9]{3}$/;
+    if (!d_idRegex.test(d_id)) {
+        res.status(400).json({ error: 'Invalid Doctor ID format.' });
+        return;
+    }
+    const sql = 'UPDATE doctor SET deleted = 1 WHERE d_id = ?';
+    db.query(sql, [d_id], (err, result) => {
+        if (err) {
+            console.error('Error executing query: ', err);
+            res.status(500).json({ error: 'Internal server error.' + err });
+            return;
+        }
+        res.json(result);
     });
 });
 
