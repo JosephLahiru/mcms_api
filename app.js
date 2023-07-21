@@ -91,6 +91,7 @@ const endpoints = {
     "Get Latest Appointment ID": '/get_lat_app_id',
     "Update Doctor By Doctor ID": '/update_doctor/:d_id',
     "Delete Doctor By Doctor ID": '/delete_doctors/:d_id',
+    "Set Doctor": '/set_doctor',
 }
 
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -1034,6 +1035,20 @@ app.get(endpoints["Delete Doctor By Doctor ID"], (req, res) => {
             return;
         }
         res.json(result);
+    });
+});
+
+//Set Doctor
+app.post(endpoints["Set Doctor"], (req, res) => {
+    const { d_id, first_name, last_name, nic, email, address, contact_no } = req.body;
+    const sql = 'INSERT INTO doctor (d_id, first_name, last_name, nic, email, address, contact_no) VALUES (?, ?, ?, ?, ?, ?, ?)';
+    db.query(sql, [d_id, first_name, last_name, nic, email, address, contact_no], (err, result) => {
+        if (err) {
+            console.error('Error executing query: ', err);
+            res.status(500).json({ error: 'Internal server error.' + err });
+            return;
+        }
+        res.json({ message: 'Doctor added successfully.' });
     });
 });
 
