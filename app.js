@@ -129,7 +129,7 @@ app.get('/get_endpoints', (req, res) => {
 
 //Get Doctors
 app.get(endpoints["Get Doctors"], (req, res) => {
-    const sql = 'SELECT * FROM doctor';
+    const sql = 'SELECT * FROM doctor WHERE deleted = 0';
     db.query(sql, (err, result) => {
         if (err) {
             console.error('Error executing query: ', err);
@@ -161,7 +161,7 @@ app.get(endpoints["Get Doctors By ID"], (req, res) => {
         res.status(400).json({ error: 'Invalid doctor ID format.' });
         return;
     }
-    const sql = 'SELECT * FROM doctor WHERE d_id = ?';
+    const sql = 'SELECT * FROM doctor WHERE d_id = ? AND deleted = 0';
     db.query(sql, [d_id], (err, result) => {
         if (err) {
             console.error('Error executing query: ', err);
