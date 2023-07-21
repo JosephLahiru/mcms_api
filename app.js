@@ -88,7 +88,8 @@ const endpoints = {
     "Get Assistants": '/get_assistants',
     "Confirm Appointment Payment By Appo ID": '/confirm_app_payment/:appo_id',
     "Get Personal Titles": '/get_personal_titles',
-    "Get Latest Appointment ID": '/get_lat_app_id'
+    "Get Latest Appointment ID": '/get_lat_app_id',
+    "Update Doctor By Doctor ID": '/update_doctor/:d_id',
 }
 
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -998,6 +999,21 @@ app.get(endpoints["Get Latest Appointment ID"], (req, res) => {
         }
         const app_id = result[0].app_id;
         res.json({ app_id });
+    });
+});
+
+// Update Doctor By Doctor ID
+app.post(endpoints["Update Doctor By Doctor ID"], (req, res) => {
+    const { first_name, last_name, nic, email, address, contact_no } = req.body;
+    const doctorId = req.params.app_id;
+    const sql = 'UPDATE doctor SET first_name=?, last_name=?, nic=?, email=?, address=?, contact_no=? WHERE d_id=?';
+    db.query(sql, [first_name, last_name, nic, email, address, contact_no, doctorId], (err, result) => {
+        if (err) {
+            console.error('Error executing query: ', err);
+            res.status(500).json({ error: 'Internal server error.' + err });
+            return;
+        }
+        res.json({ message: 'Doctor updated successfully.' });
     });
 });
 
