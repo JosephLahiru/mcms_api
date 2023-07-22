@@ -92,6 +92,8 @@ const endpoints = {
     "Update Doctor By Doctor ID": '/update_doctor/:d_id',
     "Delete Doctor By Doctor ID": '/delete_doctors/:d_id',
     "Set Doctor": '/set_doctor',
+    "Get Appointment Number": '/get_app_no',
+    "Set Appointment Number": '/set_app_no/:app_no',
 }
 
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -1051,6 +1053,21 @@ app.post(endpoints["Set Doctor"], (req, res) => {
         res.json({ message: 'Doctor added successfully.' });
     });
 });
+
+//Get Appointment Number
+app.get(endpoints["Get Appointment Number"], (req, res) => {
+    const sql = 'SELECT val FROM live_appointment WHERE app_no = 1';
+    db.query(sql, (err, result) => {
+        if (err) {
+            console.error('Error executing query: ', err);
+            res.status(500).json({ error: 'Internal server error.' + err });
+            return;
+        }
+        res.json(result);
+    });
+});
+
+//Set Appointment Number
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
