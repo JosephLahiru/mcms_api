@@ -1069,7 +1069,7 @@ app.get(endpoints["Get Appointment Number"], (req, res) => {
 
 //Set Appointment Number
 app.post(endpoints["Set Appointment Number"], (req, res) => {
-    const { val } = req.body;
+    const val = req.params.app_no;
     const sql = 'UPDATE live_appointment SET val=? WHERE app_no = 1';
     db.query(sql, [val], (err, result) => {
         if (err) {
