@@ -1068,6 +1068,18 @@ app.get(endpoints["Get Appointment Number"], (req, res) => {
 });
 
 //Set Appointment Number
+app.post(endpoints["Set Appointment Number"], (req, res) => {
+    const { val } = req.body;
+    const sql = 'UPDATE live_appointment SET val=? WHERE app_no = 1';
+    db.query(sql, [val], (err, result) => {
+        if (err) {
+            console.error('Error executing query: ', err);
+            res.status(500).json({ error: 'Internal server error.' + err });
+            return;
+        }
+        res.json({ message: 'Live value updated successfully.' });
+    });
+});
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
