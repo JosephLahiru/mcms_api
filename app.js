@@ -60,7 +60,8 @@ const endpoints = {
     "Delete Stock By Prod ID": '/delete_stock/:prdct_id',
     "Get Patient History": '/get_patient_history',
     "Set Patient History": '/set_patient_history',
-    "Get Expire": '/get_expire',
+    "Get Expire Soon": '/get_expire_soon',
+    "Get Expired": '/get_expired',
     "Get Expire By Expire Type": '/get_expire/:expire_type',
     "Get Stock Low By Stock Type": '/get_stock_low/:stock_type',
     "Get Stock Low": '/get_stock_low',
@@ -569,9 +570,22 @@ app.post(endpoints["Set Patient History"], (req, res) => {
     });
 });
 
-//Get Expire
-app.get(endpoints["Get Expire"], (req, res) => {
-    const sql = 'SELECT * FROM expire';
+//Get Expire Soon
+app.get(endpoints["Get Expire Soon"], (req, res) => {
+    const sql = 'SELECT * FROM stock_expire_soon WHERE deleted = 0';
+    db.query(sql, (err, result) => {
+        if (err) {
+            console.error('Error executing query: ', err);
+            res.status(500).json({ error: 'Internal server error.' + err });
+            return;
+        }
+        res.json(result);
+    });
+});
+
+//Get Expired
+app.get(endpoints["Get Expired"], (req, res) => {
+    const sql = 'SELECT * FROM stock_expired WHERE deleted = 0';
     db.query(sql, (err, result) => {
         if (err) {
             console.error('Error executing query: ', err);
