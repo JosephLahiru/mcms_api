@@ -62,7 +62,6 @@ const endpoints = {
     "Set Patient History": '/set_patient_history',
     "Get Expire Soon": '/get_expire_soon',
     "Get Expired": '/get_expired',
-    // "Get Expire By Expire Type": '/get_expire/:expire_type',
     "Get Stock Low By Stock Type": '/get_stock_low/:stock_type',
     "Get Stock Low": '/get_stock_low',
     "Set Ping": '/set_ping',
@@ -88,7 +87,8 @@ const endpoints = {
     "Get Personal Titles": '/get_personal_titles',
     "Get Latest Appointment ID": '/get_lat_app_id',
     "Update Channelling Doctor By Channelling Doctor ID": '/update_channelling_doctor/:cd_id',
-    "Delete Channelling Doctor By Channelling Doctor ID": '/get_channelling_doctors/:cd_id',
+    "Delete Channelling Doctor By Channelling Doctor ID": '/delete_channelling_doctor/:cd_id',
+    "Get Channelling Doctor By Channelling Doctor ID": '/get_channelling_doctor/:cd_id',
     "Set Channelling Doctor": '/set_channelling_doctor',
     "Get Appointment Number": '/get_app_no',
     "Set Appointment Number": '/set_app_no/:app_no',
@@ -596,25 +596,6 @@ app.get(endpoints["Get Expired"], (req, res) => {
     });
 });
 
-// //Get Expire By Expire Type
-// app.get(endpoints["Get Expire By Expire Type"], (req, res) => {
-//     const _type = req.params.expire_type;
-//     const _typeRegex = /^[1-9]$/;
-//     if (!_typeRegex.test(_type)) {
-//         res.status(400).json({ error: 'Invalid Expire Type format.' });
-//         return;
-//     }
-//     const sql = 'SELECT * FROM expire WHERE expire_type = ?';
-//     db.query(sql, [_type], (err, result) => {
-//         if (err) {
-//             console.error('Error executing query: ', err);
-//             res.status(500).json({ error: 'Internal server error.' + err });
-//             return;
-//         }
-//         res.json(result);
-//     });
-// });
-
 //Get Stock Low By Stock Type
 app.get(endpoints["Get Stock Low By Stock Type"], (req, res) => {
     const stock_type = req.params.stock_type;
@@ -1010,6 +991,25 @@ app.get(endpoints["Delete Channelling Doctor By Channelling Doctor ID"], (req, r
         return;
     }
     const sql = 'UPDATE channelling_doctor SET deleted = 1 WHERE cd_id = ?';
+    db.query(sql, [cd_id], (err, result) => {
+        if (err) {
+            console.error('Error executing query: ', err);
+            res.status(500).json({ error: 'Internal server error.' + err });
+            return;
+        }
+        res.json(result);
+    });
+});
+
+//Get Channelling Doctor By Channelling Doctor ID
+app.get(endpoints["Get Channelling Doctor By Channelling Doctor ID"], (req, res) => {
+    const cd_id = req.params.cd_id;
+    const cd_idRegex = /^cd_[0-9]{3}$/;
+    if (!cd_idRegex.test(cd_id)) {
+        res.status(400).json({ error: 'Invalid Channelling Doctor ID format.' });
+        return;
+    }
+    const sql = 'SELECT * FROM channelling_doctor WHERE cd_id = ? AND deleted = 0';
     db.query(sql, [cd_id], (err, result) => {
         if (err) {
             console.error('Error executing query: ', err);
