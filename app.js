@@ -1022,9 +1022,9 @@ app.get(endpoints["Get Channelling Doctor By Channelling Doctor ID"], (req, res)
 
 //Set Channelling Doctor
 app.post(endpoints["Set Channelling Doctor"], (req, res) => {
-    const { cd_id, doctor_name, d_type, nic, email, address, contact_no } = req.body;
-    const sql = 'INSERT INTO channelling_doctor (cd_id, doctor_name, d_type, nic, email, address, contact_no) VALUES (?, ?, ?, ?, ?, ?, ?)';
-    db.query(sql, [cd_id, doctor_name, d_type, nic, email, address, contact_no], (err, result) => {
+    const { cd_id, doctor_name, d_type, nic, email, address, contct_no } = req.body;
+    const sql = 'INSERT INTO channelling_doctor (cd_id, doctor_name, d_type, nic, email, address, contct_no) VALUES (?, ?, ?, ?, ?, ?, ?)';
+    db.query(sql, [cd_id, doctor_name, d_type, nic, email, address, contct_no], (err, result) => {
         if (err) {
             console.error('Error executing query: ', err);
             res.status(500).json({ error: 'Internal server error.' + err });
