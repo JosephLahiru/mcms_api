@@ -145,7 +145,7 @@ app.get(endpoints["Get Doctors"], (req, res) => {
 
 //Get Channelling Doctors
 app.get(endpoints["Get Channelling Doctors"], (req, res) => {
-    const sql = 'SELECT * FROM channelling_doctor';
+    const sql = 'SELECT * FROM channelling_doctor WHERE deleted = 0';
     db.query(sql, (err, result) => {
         if (err) {
             console.error('Error executing query: ', err);
@@ -734,7 +734,7 @@ app.get(endpoints["Get Channelling Doctor ID By Doctor Type"], (req, res) => {
         res.status(400).json({ error: 'Doctor Type cannot be empty.' });
         return;
     }
-    const sql = 'SELECT cd_id FROM channelling_doctor WHERE d_type = ?;';
+    const sql = 'SELECT cd_id FROM channelling_doctor WHERE d_type = ? AND deleted = 0;';
     db.query(sql, [d_type], (err, result) => {
         if (err) {
             console.error('Error executing query: ', err);
