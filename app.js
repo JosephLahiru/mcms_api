@@ -33,10 +33,10 @@ const authenticateToken = (req, res, next) => {
 const endpoints = {
     "Request Token": '/request_token',
     "Root": '/', 
-    "Get Doctors": '/get_doctors', 
+    //"Get Doctors": '/get_doctors', 
     "Get Channelling Doctors": '/get_channelling_doctors',
-    "Get Doctors By ID": '/get_doctors/:d_id',
-    "Set Doctors": '/set_doctors',
+    //"Get Doctors By ID": '/get_doctors/:d_id',
+    //"Set Doctors": '/set_doctors',
     "Get Patients": '/get_patients',
     "Get Patients By NIC": '/get_patients/:nic',
     "Set Patients": '/set_patients',
