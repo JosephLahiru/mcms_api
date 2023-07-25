@@ -545,9 +545,24 @@ app.get(endpoints["Get Stock By Prod ID"], (req, res) => {
 
 //Set Stock
 app.post(endpoints["Set Stock"], (req, res) => {
-    const { brand_name, prdct_name, description, mfd_date, exp_date, ac_price, sell_price, total_quantity, med_type, stock_type, expire_type } = req.body;
-    const sql = 'INSERT INTO stock (brand_name, prdct_name, description, mfd_date, exp_date, ac_price, sell_price, total_quantity, med_type, stock_type, expire_type ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
-    db.query(sql, [brand_name, prdct_name, description, mfd_date, exp_date, ac_price, sell_price, total_quantity, med_type, stock_type, expire_type], (err, result) => {
+    const { brand_name, prdct_name, description, mfd_date, exp_date, ac_price, sell_price, total_quantity, med_type, stock_type, purchased_date } = req.body;
+
+    const days_to_expire = Math.abs(new Date(exp_date) - new Date(purchased_date)) / (1000 * 60 * 60 * 24);
+
+    let _expire_type = "none"
+
+    if(days_to_expire > 0 && days_to_expire <= 30){
+        _expire_type = "short lifespan"
+    }else if(days_to_expire > 30 && days_to_expire <= 60){
+        _expire_type = "medium lifespan"
+    }else if(days_to_expire < 60){
+        _expire_type = "long lifespan"
+    }
+
+    const expire_type = _expire_type;
+
+    const sql = 'INSERT INTO stock (brand_name, prdct_name, description, mfd_date, exp_date, ac_price, sell_price, total_quantity, med_type, stock_type, expire_type, purchased_date ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+    db.query(sql, [brand_name, prdct_name, description, mfd_date, exp_date, ac_price, sell_price, total_quantity, med_type, stock_type, expire_type, purchased_date], (err, result) => {
         if (err) {
             console.error('Error executing query: ', err);
             res.status(500).json({ error: 'Internal server error.' + err });
