@@ -33,10 +33,7 @@ const authenticateToken = (req, res, next) => {
 const endpoints = {
     "Request Token": '/request_token',
     "Root": '/', 
-    "Get Doctors": '/get_doctors', 
     "Get Channelling Doctors": '/get_channelling_doctors',
-    "Get Doctors By ID": '/get_doctors/:d_id',
-    "Set Doctors": '/set_doctors',
     "Get Patients": '/get_patients',
     "Get Patients By NIC": '/get_patients/:nic',
     "Set Patients": '/set_patients',
@@ -63,7 +60,8 @@ const endpoints = {
     "Delete Stock By Prod ID": '/delete_stock/:prdct_id',
     "Get Patient History": '/get_patient_history',
     "Set Patient History": '/set_patient_history',
-    "Get Expire": '/get_expire',
+    "Get Expire Soon": '/get_expire_soon',
+    "Get Expired": '/get_expired',
     "Get Expire By Expire Type": '/get_expire/:expire_type',
     "Get Stock Low By Stock Type": '/get_stock_low/:stock_type',
     "Get Stock Low": '/get_stock_low',
@@ -89,9 +87,9 @@ const endpoints = {
     "Confirm Appointment Payment By Appo ID": '/confirm_app_payment/:appo_id',
     "Get Personal Titles": '/get_personal_titles',
     "Get Latest Appointment ID": '/get_lat_app_id',
-    "Update Doctor By Doctor ID": '/update_doctor/:d_id',
-    "Delete Doctor By Doctor ID": '/delete_doctors/:d_id',
-    "Set Doctor": '/set_doctor',
+    "Update Channelling Doctor By Channelling Doctor ID": '/update_channelling_doctor/:cd_id',
+    "Delete Channelling Doctor By Channelling Doctor ID": '/get_channelling_doctors/:cd_id',
+    "Set Channelling Doctor": '/set_channelling_doctor',
     "Get Appointment Number": '/get_app_no',
     "Set Appointment Number": '/set_app_no/:app_no',
 }
@@ -130,22 +128,9 @@ app.get('/get_endpoints', (req, res) => {
     res.send(endpoints);
 });
 
-//Get Doctors
-app.get(endpoints["Get Doctors"], (req, res) => {
-    const sql = 'SELECT * FROM doctor WHERE deleted = 0';
-    db.query(sql, (err, result) => {
-        if (err) {
-            console.error('Error executing query: ', err);
-            res.status(500).json({ error: 'Internal server error.' + err });
-            return;
-        }
-        res.json(result);
-    });
-});
-
-//Get Channeling Doctors
+//Get Channelling Doctors
 app.get(endpoints["Get Channelling Doctors"], (req, res) => {
-    const sql = 'SELECT * FROM channelling_doctor';
+    const sql = 'SELECT * FROM channelling_doctor WHERE deleted = 0';
     db.query(sql, (err, result) => {
         if (err) {
             console.error('Error executing query: ', err);
@@ -153,39 +138,6 @@ app.get(endpoints["Get Channelling Doctors"], (req, res) => {
             return;
         }
         res.json(result);
-    });
-});
-
-//Get Doctors By ID
-app.get(endpoints["Get Doctors By ID"], (req, res) => {
-    const d_id = req.params.d_id;
-    const d_idRegex = /^D\d{3}$/;
-    if (!d_idRegex.test(d_id)) {
-        res.status(400).json({ error: 'Invalid doctor ID format.' });
-        return;
-    }
-    const sql = 'SELECT * FROM doctor WHERE d_id = ? AND deleted = 0';
-    db.query(sql, [d_id], (err, result) => {
-        if (err) {
-            console.error('Error executing query: ', err);
-            res.status(500).json({ error: 'Internal server error.' + err });
-            return;
-        }
-        res.json(result);
-    });
-});
-
-//Set Doctors
-app.post(endpoints["Set Doctors"], (req, res) => {
-    const { d_id, first_name, last_name, nic, email, address, contact_no } = req.body;
-    const sql = 'INSERT INTO doctor (d_id, first_name, last_name, nic, email, address, contact_no) VALUES (?, ?, ?, ?, ?, ?, ?)';
-    db.query(sql, [d_id, first_name, last_name, nic, email, address, contact_no], (err, result) => {
-        if (err) {
-            console.error('Error executing query: ', err);
-            res.status(500).json({ error: 'Internal server error.' + err });
-            return;
-        }
-        res.json({ message: 'Doctor added successfully.' });
     });
 });
 
@@ -618,9 +570,22 @@ app.post(endpoints["Set Patient History"], (req, res) => {
     });
 });
 
-//Get Expire
-app.get(endpoints["Get Expire"], (req, res) => {
-    const sql = 'SELECT * FROM expire';
+//Get Expire Soon
+app.get(endpoints["Get Expire Soon"], (req, res) => {
+    const sql = 'SELECT * FROM stock_expire_soon WHERE deleted = 0';
+    db.query(sql, (err, result) => {
+        if (err) {
+            console.error('Error executing query: ', err);
+            res.status(500).json({ error: 'Internal server error.' + err });
+            return;
+        }
+        res.json(result);
+    });
+});
+
+//Get Expired
+app.get(endpoints["Get Expired"], (req, res) => {
+    const sql = 'SELECT * FROM stock_expired WHERE deleted = 0';
     db.query(sql, (err, result) => {
         if (err) {
             console.error('Error executing query: ', err);
@@ -734,7 +699,7 @@ app.get(endpoints["Get Channelling Doctor ID By Doctor Type"], (req, res) => {
         res.status(400).json({ error: 'Doctor Type cannot be empty.' });
         return;
     }
-    const sql = 'SELECT cd_id FROM channelling_doctor WHERE d_type = ?;';
+    const sql = 'SELECT cd_id FROM channelling_doctor WHERE d_type = ? AND deleted = 0;';
     db.query(sql, [d_type], (err, result) => {
         if (err) {
             console.error('Error executing query: ', err);
@@ -1021,31 +986,31 @@ app.get(endpoints["Get Latest Appointment ID"], (req, res) => {
     });
 });
 
-// Update Doctor By Doctor ID
-app.post(endpoints["Update Doctor By Doctor ID"], (req, res) => {
-    const { first_name, last_name, nic, email, address, contact_no } = req.body;
-    const doctorId = req.params.d_id;
-    const sql = 'UPDATE doctor SET first_name=?, last_name=?, nic=?, email=?, address=?, contact_no=? WHERE d_id=?';
-    db.query(sql, [first_name, last_name, nic, email, address, contact_no, doctorId], (err, result) => {
+// Update Channelling Doctor By Channelling Doctor ID
+app.post(endpoints["Update Channelling Doctor By Channelling Doctor ID"], (req, res) => {
+    const { doctor_name, d_type, nic, email, address, contact_no } = req.body;
+    const cd_id = req.params.cd_id;
+    const sql = 'UPDATE channelling_doctor SET doctor_name=?, d_type=?, nic=?, email=?, address=?, contact_no=? WHERE cd_id=?';
+    db.query(sql, [doctor_name, d_type, nic, email, address, contact_no, cd_id], (err, result) => {
         if (err) {
             console.error('Error executing query: ', err);
             res.status(500).json({ error: 'Internal server error.' + err });
             return;
         }
-        res.json({ message: 'Doctor updated successfully.' });
+        res.json({ message: 'Channelling doctor updated successfully.' });
     });
 });
 
-//Delete Doctor By Doctor ID
-app.get(endpoints["Delete Doctor By Doctor ID"], (req, res) => {
-    const d_id = req.params.d_id;
-    const d_idRegex = /^D[0-9]{3}$/;
-    if (!d_idRegex.test(d_id)) {
-        res.status(400).json({ error: 'Invalid Doctor ID format.' });
+//Delete Channelling Doctor By Channelling Doctor ID
+app.get(endpoints["Delete Channelling Doctor By Channelling Doctor ID"], (req, res) => {
+    const cd_id = req.params.cd_id;
+    const cd_idRegex = /^cd_[0-9]{3}$/;
+    if (!cd_idRegex.test(cd_id)) {
+        res.status(400).json({ error: 'Invalid Channelling Doctor ID format.' });
         return;
     }
-    const sql = 'UPDATE doctor SET deleted = 1 WHERE d_id = ?';
-    db.query(sql, [d_id], (err, result) => {
+    const sql = 'UPDATE channelling_doctor SET deleted = 1 WHERE cd_id = ?';
+    db.query(sql, [cd_id], (err, result) => {
         if (err) {
             console.error('Error executing query: ', err);
             res.status(500).json({ error: 'Internal server error.' + err });
@@ -1055,17 +1020,17 @@ app.get(endpoints["Delete Doctor By Doctor ID"], (req, res) => {
     });
 });
 
-//Set Doctor
-app.post(endpoints["Set Doctor"], (req, res) => {
-    const { d_id, first_name, last_name, nic, email, address, contact_no } = req.body;
-    const sql = 'INSERT INTO doctor (d_id, first_name, last_name, nic, email, address, contact_no) VALUES (?, ?, ?, ?, ?, ?, ?)';
-    db.query(sql, [d_id, first_name, last_name, nic, email, address, contact_no], (err, result) => {
+//Set Channelling Doctor
+app.post(endpoints["Set Channelling Doctor"], (req, res) => {
+    const { cd_id, doctor_name, d_type, nic, email, address, contact_no } = req.body;
+    const sql = 'INSERT INTO channelling_doctor (cd_id, doctor_name, d_type, nic, email, address, contact_no) VALUES (?, ?, ?, ?, ?, ?, ?)';
+    db.query(sql, [cd_id, doctor_name, d_type, nic, email, address, contact_no], (err, result) => {
         if (err) {
             console.error('Error executing query: ', err);
             res.status(500).json({ error: 'Internal server error.' + err });
             return;
         }
-        res.json({ message: 'Doctor added successfully.' });
+        res.json({ message: 'Channelling doctor added successfully.' });
     });
 });
 
