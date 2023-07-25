@@ -33,10 +33,7 @@ const authenticateToken = (req, res, next) => {
 const endpoints = {
     "Request Token": '/request_token',
     "Root": '/', 
-    //"Get Doctors": '/get_doctors', 
     "Get Channelling Doctors": '/get_channelling_doctors',
-    //"Get Doctors By ID": '/get_doctors/:d_id',
-    //"Set Doctors": '/set_doctors',
     "Get Patients": '/get_patients',
     "Get Patients By NIC": '/get_patients/:nic',
     "Set Patients": '/set_patients',
@@ -130,19 +127,6 @@ app.get('/get_endpoints', (req, res) => {
     res.send(endpoints);
 });
 
-//Get Doctors
-app.get(endpoints["Get Doctors"], (req, res) => {
-    const sql = 'SELECT * FROM doctor WHERE deleted = 0';
-    db.query(sql, (err, result) => {
-        if (err) {
-            console.error('Error executing query: ', err);
-            res.status(500).json({ error: 'Internal server error.' + err });
-            return;
-        }
-        res.json(result);
-    });
-});
-
 //Get Channelling Doctors
 app.get(endpoints["Get Channelling Doctors"], (req, res) => {
     const sql = 'SELECT * FROM channelling_doctor WHERE deleted = 0';
@@ -153,39 +137,6 @@ app.get(endpoints["Get Channelling Doctors"], (req, res) => {
             return;
         }
         res.json(result);
-    });
-});
-
-//Get Doctors By ID
-app.get(endpoints["Get Doctors By ID"], (req, res) => {
-    const d_id = req.params.d_id;
-    const d_idRegex = /^D\d{3}$/;
-    if (!d_idRegex.test(d_id)) {
-        res.status(400).json({ error: 'Invalid doctor ID format.' });
-        return;
-    }
-    const sql = 'SELECT * FROM doctor WHERE d_id = ? AND deleted = 0';
-    db.query(sql, [d_id], (err, result) => {
-        if (err) {
-            console.error('Error executing query: ', err);
-            res.status(500).json({ error: 'Internal server error.' + err });
-            return;
-        }
-        res.json(result);
-    });
-});
-
-//Set Doctors
-app.post(endpoints["Set Doctors"], (req, res) => {
-    const { d_id, first_name, last_name, nic, email, address, contact_no } = req.body;
-    const sql = 'INSERT INTO doctor (d_id, first_name, last_name, nic, email, address, contact_no) VALUES (?, ?, ?, ?, ?, ?, ?)';
-    db.query(sql, [d_id, first_name, last_name, nic, email, address, contact_no], (err, result) => {
-        if (err) {
-            console.error('Error executing query: ', err);
-            res.status(500).json({ error: 'Internal server error.' + err });
-            return;
-        }
-        res.json({ message: 'Doctor added successfully.' });
     });
 });
 
