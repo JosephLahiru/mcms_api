@@ -971,7 +971,7 @@ app.get(endpoints["Get Latest Appointment ID"], (req, res) => {
 app.post(endpoints["Update Channelling Doctor By Channelling Doctor ID"], (req, res) => {
     const { doctor_name, d_type, nic, email, address, contact_no } = req.body;
     const cd_id = req.params.cd_id;
-    const sql = 'UPDATE channelling_doctor SET doctor_name=?, d_type=?, nic=?, email=?, address=?, contact_no=? WHERE cd_id=?';
+    const sql = 'UPDATE channelling_doctor SET doctor_name=?, d_type=?, nic=?, email=?, address=?, contct_no=? WHERE cd_id=?';
     db.query(sql, [doctor_name, d_type, nic, email, address, contact_no, cd_id], (err, result) => {
         if (err) {
             console.error('Error executing query: ', err);
