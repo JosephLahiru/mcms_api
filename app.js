@@ -89,9 +89,9 @@ const endpoints = {
     "Confirm Appointment Payment By Appo ID": '/confirm_app_payment/:appo_id',
     "Get Personal Titles": '/get_personal_titles',
     "Get Latest Appointment ID": '/get_lat_app_id',
-    "Update Doctor By Doctor ID": '/update_doctor/:d_id',
-    "Delete Doctor By Doctor ID": '/delete_doctors/:d_id',
-    "Set Doctor": '/set_doctor',
+    "Update Channelling Doctor By Channelling Doctor ID": '/update_channelling_doctor/:cd_id',
+    "Delete Channelling Doctor By Channelling Doctor ID": '/get_channelling_doctors/:cd_id',
+    "Set Channelling Doctor": '/set_channelling_doctor',
     "Get Appointment Number": '/get_app_no',
     "Set Appointment Number": '/set_app_no/:app_no',
 }
@@ -143,7 +143,7 @@ app.get(endpoints["Get Doctors"], (req, res) => {
     });
 });
 
-//Get Channeling Doctors
+//Get Channelling Doctors
 app.get(endpoints["Get Channelling Doctors"], (req, res) => {
     const sql = 'SELECT * FROM channelling_doctor';
     db.query(sql, (err, result) => {
@@ -1021,8 +1021,8 @@ app.get(endpoints["Get Latest Appointment ID"], (req, res) => {
     });
 });
 
-// Update Doctor By Doctor ID
-app.post(endpoints["Update Doctor By Doctor ID"], (req, res) => {
+// Update Channelling Doctor By Channelling Doctor ID
+app.post(endpoints["Update Channelling Doctor By Channelling Doctor ID"], (req, res) => {
     const { first_name, last_name, nic, email, address, contact_no } = req.body;
     const doctorId = req.params.d_id;
     const sql = 'UPDATE doctor SET first_name=?, last_name=?, nic=?, email=?, address=?, contact_no=? WHERE d_id=?';
@@ -1036,16 +1036,16 @@ app.post(endpoints["Update Doctor By Doctor ID"], (req, res) => {
     });
 });
 
-//Delete Doctor By Doctor ID
-app.get(endpoints["Delete Doctor By Doctor ID"], (req, res) => {
-    const d_id = req.params.d_id;
-    const d_idRegex = /^D[0-9]{3}$/;
-    if (!d_idRegex.test(d_id)) {
+//Delete Channelling Doctor By Channelling Doctor ID
+app.get(endpoints["Delete Channelling Doctor By Channelling Doctor ID"], (req, res) => {
+    const cd_id = req.params.cd_id;
+    const cd_idRegex = /^cd_[0-9]{3}$/;
+    if (!cd_idRegex.test(cd_id)) {
         res.status(400).json({ error: 'Invalid Doctor ID format.' });
         return;
     }
-    const sql = 'UPDATE doctor SET deleted = 1 WHERE d_id = ?';
-    db.query(sql, [d_id], (err, result) => {
+    const sql = 'UPDATE channelling_doctor SET deleted = 1 WHERE cd_id = ?';
+    db.query(sql, [cd_id], (err, result) => {
         if (err) {
             console.error('Error executing query: ', err);
             res.status(500).json({ error: 'Internal server error.' + err });
@@ -1055,8 +1055,8 @@ app.get(endpoints["Delete Doctor By Doctor ID"], (req, res) => {
     });
 });
 
-//Set Doctor
-app.post(endpoints["Set Doctor"], (req, res) => {
+//Set Channelling Doctor
+app.post(endpoints["Set Channelling Doctor"], (req, res) => {
     const { d_id, first_name, last_name, nic, email, address, contact_no } = req.body;
     const sql = 'INSERT INTO doctor (d_id, first_name, last_name, nic, email, address, contact_no) VALUES (?, ?, ?, ?, ?, ?, ?)';
     db.query(sql, [d_id, first_name, last_name, nic, email, address, contact_no], (err, result) => {
