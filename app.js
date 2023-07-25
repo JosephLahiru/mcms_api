@@ -1041,7 +1041,7 @@ app.get(endpoints["Delete Channelling Doctor By Channelling Doctor ID"], (req, r
     const cd_id = req.params.cd_id;
     const cd_idRegex = /^cd_[0-9]{3}$/;
     if (!cd_idRegex.test(cd_id)) {
-        res.status(400).json({ error: 'Invalid Doctor ID format.' });
+        res.status(400).json({ error: 'Invalid Channelling Doctor ID format.' });
         return;
     }
     const sql = 'UPDATE channelling_doctor SET deleted = 1 WHERE cd_id = ?';
@@ -1057,15 +1057,15 @@ app.get(endpoints["Delete Channelling Doctor By Channelling Doctor ID"], (req, r
 
 //Set Channelling Doctor
 app.post(endpoints["Set Channelling Doctor"], (req, res) => {
-    const { d_id, first_name, last_name, nic, email, address, contact_no } = req.body;
-    const sql = 'INSERT INTO doctor (d_id, first_name, last_name, nic, email, address, contact_no) VALUES (?, ?, ?, ?, ?, ?, ?)';
-    db.query(sql, [d_id, first_name, last_name, nic, email, address, contact_no], (err, result) => {
+    const { cd_id, doctor_name, d_type, nic, email, address, contact_no } = req.body;
+    const sql = 'INSERT INTO channelling_doctor (cd_id, doctor_name, d_type, nic, email, address, contact_no) VALUES (?, ?, ?, ?, ?, ?, ?)';
+    db.query(sql, [cd_id, doctor_name, d_type, nic, email, address, contact_no], (err, result) => {
         if (err) {
             console.error('Error executing query: ', err);
             res.status(500).json({ error: 'Internal server error.' + err });
             return;
         }
-        res.json({ message: 'Doctor added successfully.' });
+        res.json({ message: 'Channelling doctor added successfully.' });
     });
 });
 
