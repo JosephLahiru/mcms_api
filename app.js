@@ -549,14 +549,14 @@ app.post(endpoints["Set Stock"], (req, res) => {
 
     const days_to_expire = Math.abs(new Date(exp_date) - new Date(purchased_date)) / (1000 * 60 * 60 * 24);
 
-    let _expire_type = "none"
+    let _expire_type = 0
 
     if(days_to_expire > 0 && days_to_expire <= 30){
-        _expire_type = "short lifespan"
+        _expire_type = 1
     }else if(days_to_expire > 30 && days_to_expire <= 60){
-        _expire_type = "medium lifespan"
+        _expire_type = 2
     }else if(days_to_expire < 60){
-        _expire_type = "long lifespan"
+        _expire_type = 3
     }
 
     const expire_type = _expire_type;
