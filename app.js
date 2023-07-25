@@ -1023,16 +1023,16 @@ app.get(endpoints["Get Latest Appointment ID"], (req, res) => {
 
 // Update Channelling Doctor By Channelling Doctor ID
 app.post(endpoints["Update Channelling Doctor By Channelling Doctor ID"], (req, res) => {
-    const { first_name, last_name, nic, email, address, contact_no } = req.body;
-    const doctorId = req.params.d_id;
-    const sql = 'UPDATE doctor SET first_name=?, last_name=?, nic=?, email=?, address=?, contact_no=? WHERE d_id=?';
-    db.query(sql, [first_name, last_name, nic, email, address, contact_no, doctorId], (err, result) => {
+    const { doctor_name, d_type, nic, email, address, contact_no } = req.body;
+    const cd_id = req.params.cd_id;
+    const sql = 'UPDATE channelling_doctor SET doctor_name=?, d_type=?, nic=?, email=?, address=?, contact_no=? WHERE cd_id=?';
+    db.query(sql, [doctor_name, d_type, nic, email, address, contact_no, cd_id], (err, result) => {
         if (err) {
             console.error('Error executing query: ', err);
             res.status(500).json({ error: 'Internal server error.' + err });
             return;
         }
-        res.json({ message: 'Doctor updated successfully.' });
+        res.json({ message: 'Channelling doctor updated successfully.' });
     });
 });
 
