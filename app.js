@@ -62,7 +62,7 @@ const endpoints = {
     "Set Patient History": '/set_patient_history',
     "Get Expire Soon": '/get_expire_soon',
     "Get Expired": '/get_expired',
-    "Get Expire By Expire Type": '/get_expire/:expire_type',
+    // "Get Expire By Expire Type": '/get_expire/:expire_type',
     "Get Stock Low By Stock Type": '/get_stock_low/:stock_type',
     "Get Stock Low": '/get_stock_low',
     "Set Ping": '/set_ping',
@@ -596,24 +596,24 @@ app.get(endpoints["Get Expired"], (req, res) => {
     });
 });
 
-//Get Expire By Expire Type
-app.get(endpoints["Get Expire By Expire Type"], (req, res) => {
-    const _type = req.params.expire_type;
-    const _typeRegex = /^[1-9]$/;
-    if (!_typeRegex.test(_type)) {
-        res.status(400).json({ error: 'Invalid Expire Type format.' });
-        return;
-    }
-    const sql = 'SELECT * FROM expire WHERE expire_type = ?';
-    db.query(sql, [_type], (err, result) => {
-        if (err) {
-            console.error('Error executing query: ', err);
-            res.status(500).json({ error: 'Internal server error.' + err });
-            return;
-        }
-        res.json(result);
-    });
-});
+// //Get Expire By Expire Type
+// app.get(endpoints["Get Expire By Expire Type"], (req, res) => {
+//     const _type = req.params.expire_type;
+//     const _typeRegex = /^[1-9]$/;
+//     if (!_typeRegex.test(_type)) {
+//         res.status(400).json({ error: 'Invalid Expire Type format.' });
+//         return;
+//     }
+//     const sql = 'SELECT * FROM expire WHERE expire_type = ?';
+//     db.query(sql, [_type], (err, result) => {
+//         if (err) {
+//             console.error('Error executing query: ', err);
+//             res.status(500).json({ error: 'Internal server error.' + err });
+//             return;
+//         }
+//         res.json(result);
+//     });
+// });
 
 //Get Stock Low By Stock Type
 app.get(endpoints["Get Stock Low By Stock Type"], (req, res) => {
