@@ -1123,18 +1123,18 @@ app.get(endpoints["Get Total Sold Drug Quantity"], (req, res) => {
     });
 });
 
-//Get Total Sales Last Week
-app.get(endpoints["Get Total Sales Last Week"], (req, res) => {
-    const sql = 'SELECT COUNT(*) AS previous_week_bill_count FROM billing WHERE inv_date >= DATEADD(dd, -7, CURRENT_DATE()) AND inv_date < CURRENT_DATE();';
-    db.query(sql, (err, result) => {
-        if (err) {
-            console.error('Error executing query: ', err);
-            res.status(500).json({ error: 'Internal server error.' + err });
-            return;
-        }
-        res.json(result);
-    });
-});
+// //Get Total Sales Last Week
+// app.get(endpoints["Get Total Sales Last Week"], (req, res) => {
+//     const sql = 'SELECT COUNT(*) AS previous_week_bill_count FROM billing WHERE inv_date >= DATEADD(dd, -7, CURRENT_DATE()) AND inv_date < CURRENT_DATE();';
+//     db.query(sql, (err, result) => {
+//         if (err) {
+//             console.error('Error executing query: ', err);
+//             res.status(500).json({ error: 'Internal server error.' + err });
+//             return;
+//         }
+//         res.json(result);
+//     });
+// });
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
