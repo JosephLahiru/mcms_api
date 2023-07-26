@@ -589,7 +589,7 @@ app.get(endpoints["Get Expire Soon By Expire Type"], (req, res) => {
     const exp_type = req.params.exp_type;
     const exp_typeRegex = /^[1-9]$/;
     if (!exp_typeRegex.test(exp_type)) {
-        res.status(400).json({ error: 'Invalid Product ID format.' });
+        res.status(400).json({ error: 'Invalid Expire ID format.' });
         return;
     }
     const sql = 'SELECT * FROM stock_expire_soon WHERE exp_type = ? AND deleted = 0';
