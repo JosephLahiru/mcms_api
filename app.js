@@ -94,6 +94,7 @@ const endpoints = {
     "Set Channelling Doctor": '/set_channelling_doctor',
     "Get Appointment Number": '/get_app_no',
     "Set Appointment Number": '/set_app_no/:app_no',
+    "Get Last Week Appointments": '/get_lastweek_app',
 }
 
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -1091,6 +1092,19 @@ app.post(endpoints["Set Appointment Number"], (req, res) => {
             return;
         }
         res.json({ message: 'Live value updated successfully.' });
+    });
+});
+
+//Get Last Week Appointments
+app.get(endpoints["Get Last Week Appointments"], (req, res) => {
+    const sql = 'SELECT COUNT(*) AS appointment_count FROM appointment WHERE app_date >= CURRENT_DATE() - INTERVAL 7 DAY AND app_date <= CURRENT_DATE();';
+    db.query(sql, (err, result) => {
+        if (err) {
+            console.error('Error executing query: ', err);
+            res.status(500).json({ error: 'Internal server error.' + err });
+            return;
+        }
+        res.json(result);
     });
 });
 
