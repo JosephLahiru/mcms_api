@@ -61,6 +61,7 @@ const endpoints = {
     "Get Patient History": '/get_patient_history',
     "Set Patient History": '/set_patient_history',
     "Get Expire Soon": '/get_expire_soon',
+    "Get Expire Soon By Expire Type": '/get_expire_soon/:exp_type',
     "Get Expired": '/get_expired',
     "Get Stock Low By Stock Type": '/get_stock_low/:stock_type',
     "Get Stock Low": '/get_stock_low',
@@ -574,6 +575,25 @@ app.post(endpoints["Set Patient History"], (req, res) => {
 app.get(endpoints["Get Expire Soon"], (req, res) => {
     const sql = 'SELECT * FROM stock_expire_soon WHERE deleted = 0';
     db.query(sql, (err, result) => {
+        if (err) {
+            console.error('Error executing query: ', err);
+            res.status(500).json({ error: 'Internal server error.' + err });
+            return;
+        }
+        res.json(result);
+    });
+});
+
+// Get Expire Soon By Expire Type
+app.get(endpoints["Get Expire Soon By Expire Type"], (req, res) => {
+    const exp_type = req.params.exp_type;
+    const exp_typeRegex = /^[1-9]$/;
+    if (!exp_typeRegex.test(exp_type)) {
+        res.status(400).json({ error: 'Invalid Expire ID format.' });
+        return;
+    }
+    const sql = 'SELECT * FROM stock_expire_soon WHERE expire_type = ? AND deleted = 0';
+    db.query(sql, [exp_type], (err, result) => {
         if (err) {
             console.error('Error executing query: ', err);
             res.status(500).json({ error: 'Internal server error.' + err });
