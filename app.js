@@ -93,6 +93,7 @@ const endpoints = {
     "Set Channelling Doctor": '/set_channelling_doctor',
     "Get Appointment Number": '/get_app_no',
     "Set Appointment Number": '/set_app_no/:app_no',
+    "Get Admin Data": '/get_admin_data',
 }
 
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -113,11 +114,10 @@ app.post(endpoints["Request Token"], (req, res) => {
       return res.status(401).json({ error: 'Invalid username or password' });
     }
   
-    const token = jwt.sign(user, 'YouTookMyHeartAwayWhenMyWholeWorldWasGray');
+    const token = jwt.sign(user, 'YouTookMyHeartAwayWhenMyWholeWorldWasGray', { expiresIn: '1m' });
 
     res.json({ token });
 });
-  
 
 //Online Test
 app.get(endpoints["Root"], (req, res) => {
