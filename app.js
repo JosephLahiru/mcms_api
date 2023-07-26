@@ -85,6 +85,7 @@ const endpoints = {
     "Get Admin Details": '/get_admin_details',
     "Authenticate User": '/user_authenticate',
     "Get Assistants": '/get_assistants',
+    "Get Assistants By ID": '/get_assistants/:a_id',
     "Confirm Appointment Payment By Appo ID": '/confirm_app_payment/:appo_id',
     "Get Personal Titles": '/get_personal_titles',
     "Get Latest Appointment ID": '/get_lat_app_id',
@@ -948,6 +949,25 @@ app.post(endpoints["Authenticate User"], (req, res) => {
 app.get(endpoints["Get Assistants"], (req, res) => {
     const sql = 'SELECT * FROM assistent';
     db.query(sql, (err, result) => {
+        if (err) {
+            console.error('Error executing query: ', err);
+            res.status(500).json({ error: 'Internal server error.' + err });
+            return;
+        }
+        res.json(result);
+    });
+});
+
+//Get Assistants By ID
+app.get(endpoints["Get Assistants By ID"], (req, res) => {
+    const a_id = req.params.a_id;
+    const a_idRegex = /^A[0-9]{3}$/;
+    if (!a_idRegex.test(a_id)) {
+        res.status(400).json({ error: 'Invalid assistant ID format.' });
+        return;
+    }
+    const sql = 'SELECT * FROM assistent WHERE assit_id = ?';
+    db.query(sql, [a_id], (err, result) => {
         if (err) {
             console.error('Error executing query: ', err);
             res.status(500).json({ error: 'Internal server error.' + err });
