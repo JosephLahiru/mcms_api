@@ -85,6 +85,7 @@ const endpoints = {
     "Get Admin Details": '/get_admin_details',
     "Authenticate User": '/user_authenticate',
     "Get Assistants": '/get_assistants',
+    "Get Assistants By ID": '/get_assistants/:a_id',
     "Confirm Appointment Payment By Appo ID": '/confirm_app_payment/:appo_id',
     "Get Personal Titles": '/get_personal_titles',
     "Get Latest Appointment ID": '/get_lat_app_id',
@@ -95,6 +96,8 @@ const endpoints = {
     "Get Appointment Number": '/get_app_no',
     "Set Appointment Number": '/set_app_no/:app_no',
     "Get Last Week Appointments": '/get_lastweek_app',
+    "Get Total Sold Drug Quantity": '/get_total_sold_drug_quantity',
+    "Get Total Sales Last Week": '/get_total_sales_last_week',
 }
 
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -955,6 +958,25 @@ app.get(endpoints["Get Assistants"], (req, res) => {
     });
 });
 
+//Get Assistants By ID
+app.get(endpoints["Get Assistants By ID"], (req, res) => {
+    const a_id = req.params.a_id;
+    const a_idRegex = /^A[0-9]{3}$/;
+    if (!a_idRegex.test(a_id)) {
+        res.status(400).json({ error: 'Invalid assistant ID format.' });
+        return;
+    }
+    const sql = 'SELECT * FROM assistent WHERE assit_id = ?';
+    db.query(sql, [a_id], (err, result) => {
+        if (err) {
+            console.error('Error executing query: ', err);
+            res.status(500).json({ error: 'Internal server error.' + err });
+            return;
+        }
+        res.json(result);
+    });
+});
+
 //Confirm Appointment Payment By Appo ID
 app.get(endpoints["Confirm Appointment Payment By Appo ID"], (req, res) => {
     const appo_id = req.params.appo_id;
@@ -1107,6 +1129,32 @@ app.get(endpoints["Get Last Week Appointments"], (req, res) => {
         res.json(result);
     });
 });
+
+//Get Total Sold Drug Quantity
+app.get(endpoints["Get Total Sold Drug Quantity"], (req, res) => {
+    const sql = 'SELECT SUM(drug_quantity) AS total_drug_quantity FROM billing_items;';
+    db.query(sql, (err, result) => {
+        if (err) {
+            console.error('Error executing query: ', err);
+            res.status(500).json({ error: 'Internal server error.' + err });
+            return;
+        }
+        res.json(result);
+    });
+});
+
+// //Get Total Sales Last Week
+// app.get(endpoints["Get Total Sales Last Week"], (req, res) => {
+//     const sql = 'SELECT COUNT(*) AS previous_week_bill_count FROM billing WHERE inv_date >= DATEADD(dd, -7, CURRENT_DATE()) AND inv_date < CURRENT_DATE();';
+//     db.query(sql, (err, result) => {
+//         if (err) {
+//             console.error('Error executing query: ', err);
+//             res.status(500).json({ error: 'Internal server error.' + err });
+//             return;
+//         }
+//         res.json(result);
+//     });
+// });
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
