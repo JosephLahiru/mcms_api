@@ -82,6 +82,7 @@ const endpoints = {
     "Get Doctor Names": '/get_doctor_names',
     "Get Current App Num": '/get_curr_app_num/:curr_date/:cd_id',
     "Get User Details": '/get_user_details',
+    "Get Admin Details": '/get_admin_details',
     "Authenticate User": '/user_authenticate',
     "Get Assistants": '/get_assistants',
     "Confirm Appointment Payment By Appo ID": '/confirm_app_payment/:appo_id',
@@ -113,11 +114,10 @@ app.post(endpoints["Request Token"], (req, res) => {
       return res.status(401).json({ error: 'Invalid username or password' });
     }
   
-    const token = jwt.sign(user, 'YouTookMyHeartAwayWhenMyWholeWorldWasGray');
+    const token = jwt.sign(user, 'YouTookMyHeartAwayWhenMyWholeWorldWasGray', { expiresIn: '1m' });
 
     res.json({ token });
 });
-  
 
 //Online Test
 app.get(endpoints["Root"], (req, res) => {
@@ -895,6 +895,19 @@ app.get(endpoints["Get Current App Num"], (req, res) => {
 //Get User Details
 app.get(endpoints["Get User Details"], authenticateToken, (req, res) => {
     const sql = 'SELECT * FROM user;';
+    db.query(sql, (err, result) => {
+        if (err) {
+            console.error('Error executing query: ', err);
+            res.status(500).json({ error: 'Internal server error.' + err });
+            return;
+        }
+        res.json(result);
+    });
+});
+
+//Get Admin Details
+app.get(endpoints["Get Admin Details"], authenticateToken, (req, res) => {
+    const sql = 'SELECT * FROM admin;';
     db.query(sql, (err, result) => {
         if (err) {
             console.error('Error executing query: ', err);
