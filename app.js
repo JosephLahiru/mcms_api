@@ -95,6 +95,7 @@ const endpoints = {
     "Get Appointment Number": '/get_app_no',
     "Set Appointment Number": '/set_app_no/:app_no',
     "Get Last Week Appointments": '/get_lastweek_app',
+    "Get Total Sold Drug Quantity": '/get_total_sold_drug_quantity',
 }
 
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -1098,6 +1099,19 @@ app.post(endpoints["Set Appointment Number"], (req, res) => {
 //Get Last Week Appointments
 app.get(endpoints["Get Last Week Appointments"], (req, res) => {
     const sql = 'SELECT COUNT(*) AS appointment_count FROM appointment WHERE app_date >= CURRENT_DATE() - INTERVAL 7 DAY AND app_date <= CURRENT_DATE();';
+    db.query(sql, (err, result) => {
+        if (err) {
+            console.error('Error executing query: ', err);
+            res.status(500).json({ error: 'Internal server error.' + err });
+            return;
+        }
+        res.json(result);
+    });
+});
+
+//Get Total Sold Drug Quantity
+app.get(endpoints["Get Total Sold Drug Quantity"], (req, res) => {
+    const sql = 'SELECT SUM(drug_quantity) AS total_drug_quantity FROM billing_items;';
     db.query(sql, (err, result) => {
         if (err) {
             console.error('Error executing query: ', err);
