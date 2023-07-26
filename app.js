@@ -592,7 +592,7 @@ app.get(endpoints["Get Expire Soon By Expire Type"], (req, res) => {
         res.status(400).json({ error: 'Invalid Expire ID format.' });
         return;
     }
-    const sql = 'SELECT * FROM stock_expire_soon WHERE exp_type = ? AND deleted = 0';
+    const sql = 'SELECT * FROM stock_expire_soon WHERE expire_type = ? AND deleted = 0';
     db.query(sql, [exp_type], (err, result) => {
         if (err) {
             console.error('Error executing query: ', err);
