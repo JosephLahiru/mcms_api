@@ -346,7 +346,7 @@ app.get(endpoints["Get Attendance By ID and Date"], (req, res) => {
 //Set Attendance
 app.post(endpoints["Set Attendance"], (req, res) => {
     const { assit_id, date, check_in, check_out, leave } = req.body;
-    const sql = 'INSERT INTO attendance (assit_id, date, check_in, check_out, leave) VALUES (?, ?, ?, ?, ?)';
+    const sql = 'INSERT INTO attendance (assit_id, date, check_in, check_out, `leave`) VALUES (?, ?, ?, ?, ?)';
     db.query(sql, [assit_id, date, check_in, check_out, leave], (err, result) => {
         if (err) {
             console.error('Error executing query: ', err);
