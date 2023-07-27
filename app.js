@@ -98,7 +98,7 @@ const endpoints = {
     "Get Last Week Appointments": '/get_lastweek_app',
     "Get Total Sold Drug Quantity": '/get_total_sold_drug_quantity',
     "Get Total Sales Last Week": '/get_total_sales_last_week',
-    
+    "Get Latest Invoice No": '/get_lat_inv_no',
 }
 
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -1154,6 +1154,20 @@ app.get(endpoints["Get Total Sales Last Week"], (req, res) => {
             return;
         }
         res.json(result);
+    });
+});
+
+//Get Latest Invoice No
+app.get(endpoints["Get Latest Invoice No"], (req, res) => {
+    const sql = 'SELECT MAX(inv_id) AS inv_id FROM billing';
+    db.query(sql, (err, result) => {
+        if (err) {
+            console.error('Error executing query: ', err);
+            res.status(500).json({ error: 'Internal server error.' + err });
+            return;
+        }
+        const inv_id = result[0].inv_id;
+        res.json({ inv_id });
     });
 });
 
