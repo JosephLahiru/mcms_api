@@ -98,6 +98,7 @@ const endpoints = {
     "Get Last Week Appointments": '/get_lastweek_app',
     "Get Total Sold Drug Quantity": '/get_total_sold_drug_quantity',
     "Get Total Sales Last Week": '/get_total_sales_last_week',
+    
 }
 
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -1119,7 +1120,7 @@ app.post(endpoints["Set Appointment Number"], (req, res) => {
 
 //Get Last Week Appointments
 app.get(endpoints["Get Last Week Appointments"], (req, res) => {
-    const sql = 'SELECT COUNT(*) AS appointment_count FROM appointment WHERE app_date >= CURRENT_DATE() - INTERVAL 7 DAY AND app_date <= CURRENT_DATE();';
+    const sql = 'SELECT COUNT(*) AS appointment_count FROM appointment WHERE app_date >= CURRENT_DATE() - INTERVAL 5 DAY';
     db.query(sql, (err, result) => {
         if (err) {
             console.error('Error executing query: ', err);
@@ -1143,18 +1144,18 @@ app.get(endpoints["Get Total Sold Drug Quantity"], (req, res) => {
     });
 });
 
-// //Get Total Sales Last Week
-// app.get(endpoints["Get Total Sales Last Week"], (req, res) => {
-//     const sql = 'SELECT COUNT(*) AS previous_week_bill_count FROM billing WHERE inv_date >= DATEADD(dd, -7, CURRENT_DATE()) AND inv_date < CURRENT_DATE();';
-//     db.query(sql, (err, result) => {
-//         if (err) {
-//             console.error('Error executing query: ', err);
-//             res.status(500).json({ error: 'Internal server error.' + err });
-//             return;
-//         }
-//         res.json(result);
-//     });
-// });
+//Get Total Sales Last Week
+app.get(endpoints["Get Total Sales Last Week"], (req, res) => {
+    const sql = 'SELECT COUNT(*) AS previous_week_bill_count FROM billing WHERE inv_date >= CURDATE() - INTERVAL 5 DAY;';
+    db.query(sql, (err, result) => {
+        if (err) {
+            console.error('Error executing query: ', err);
+            res.status(500).json({ error: 'Internal server error.' + err });
+            return;
+        }
+        res.json(result);
+    });
+});
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
