@@ -100,6 +100,7 @@ const endpoints = {
     "Get Total Sales Last Week": '/get_total_sales_last_week',
     "Get Latest Invoice No": '/get_lat_inv_no',
     "Get Billing": '/get_billing',
+    "Get Current Appointmant Data": '/get_curr_app_user_data/:app_num',
 }
 
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -1176,6 +1177,41 @@ app.get(endpoints["Get Latest Invoice No"], (req, res) => {
 app.get(endpoints["Get Billing"], (req, res) => {
     const sql = 'SELECT * FROM billing';
     db.query(sql, (err, result) => {
+        if (err) {
+            console.error('Error executing query: ', err);
+            res.status(500).json({ error: 'Internal server error.' + err });
+            return;
+        }
+        res.json(result);
+    });
+});
+
+//Get Current Appointmant Data
+app.post(endpoints["Get Current Appointmant Data"], (req, res) => {
+    const val = req.params.app_no;
+    const sql = 'SELECT * FROM appointment WHERE ';
+    db.query(sql, [val], (err, result) => {
+        if (err) {
+            console.error('Error executing query: ', err);
+            res.status(500).json({ error: 'Internal server error.' + err });
+            return;
+        }
+        res.json({ message: 'Live value updated successfully.' });
+    });
+});
+
+//Get Current Appointmant Data
+app.get(endpoints["Get Current Appointmant Data"], (req, res) => {
+    const app_num = req.params.app_num;
+    const { app_date, cd_id } = req.body;
+
+    // const app_numRegex = /^[0-9]{3}$/;
+    // if (!cd_idRegex.test(cd_id)) {
+    //     res.status(400).json({ error: 'Invalid Channelling Doctor ID format.' });
+    //     return;
+    // }
+    const sql = 'SELECT * FROM appointment WHERE app_num = ? AND app_date = ? AND cd_id = ?';
+    db.query(sql, [app_num, app_date, cd_id], (err, result) => {
         if (err) {
             console.error('Error executing query: ', err);
             res.status(500).json({ error: 'Internal server error.' + err });
